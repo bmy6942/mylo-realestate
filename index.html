@@ -418,12 +418,12 @@
   const STORAGE_BUCKET = 'property-photos';
   const STORAGE_URL_BASE = 'https://ehvbuzxixaxwphlrszuw.supabase.co/storage/v1/object/public/property-photos';
 
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // Load properties from Supabase
   async function loadProperties() {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await sb
         .from('properties')
         .select('*, property_photos(*)')
         .order('created_at', { ascending: false })

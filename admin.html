@@ -726,7 +726,7 @@
   // ===== SUPABASE SETUP =====
   const SUPABASE_URL = 'https://ehvbuzxixaxwphlrszuw.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVodmJ1enhpeGF4d3BobHJzenV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjgxMjcsImV4cCI6MjA4OTk0NDEyN30.2XJiHQFurNoXlZ0LWJTsVZOYVI7RF1XhVeXMvX-E4aM';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // ===== STATE =====
   let currentUser = null;
@@ -745,7 +745,7 @@
     setupDragDrop();
   });
 
-  supabase.auth.onAuthStateChange((event, session) => {
+  sb.auth.onAuthStateChange((event, session) => {
     if (session) {
       currentUser = session.user;
       showAdminPage();
@@ -757,7 +757,7 @@
 
   // ===== AUTH =====
   async function checkAuthState() {
-    const { data: { session } } = await supabase.auth.getSession();
+    const { data: { session } } = await sb.auth.getSession();
     if (session) {
       currentUser = session.user;
       showAdminPage();
@@ -794,7 +794,7 @@
 
     try {
       if (isSignupMode) {
-        const { error } = await supabase.auth.signUp({ email, password });
+        const { error } = await sb.auth.signUp({ email, password });
         if (error) throw error;
         showToast('帳號建立成功，請登入', 'success');
         isSignupMode = false;
@@ -802,7 +802,7 @@
         document.querySelector('.login-hint').innerHTML = '<p>首次使用？<a href="#" class="signup-link" onclick="toggleSignupMode(event)">建立帳號</a></p>';
         document.getElementById('password').value = '';
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { error } = await sb.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
       errorDiv.style.display = 'none';
@@ -814,7 +814,7 @@
 
   async function doLogout() {
     try {
-      const { error } = await supabase.auth.signOut();
+      const { error } = await sb.auth.signOut();
       if (error) throw error;
       currentUser = null;
       showLoginPage();
@@ -845,7 +845,7 @@
   // ===== PROPERTIES =====
   async function loadProperties() {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await sb
         .from('properties')
         .select('*, property_photos(*)')
         .order('created_at', { ascending: false });
@@ -990,14 +990,14 @@
 
       if (id) {
         // Update existing property
-        const { error } = await supabase
+        const { error } = await sb
           .from('properties')
           .update({ title, price, location, area, rooms, floor, type, status, icon, video, note, updated_at: new Date() })
           .eq('id', propId);
         if (error) throw error;
       } else {
         // Create new property
-        const { data, error } = await supabase
+        const { data, error } = await sb
           .from('properties')
           .insert([{ title, price, location, area, rooms, floor, type, status, icon, video, note }])
           .select();
@@ -1012,13 +1012,13 @@
         const filename = newPhotos[i].file ? newPhotos[i].file.name : `photo_${Date.now()}_${i}.jpg`;
         const storagePath = `${propId}/${Date.now()}_${filename}`;
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await sb.storage
           .from('property-photos')
           .upload(storagePath, photoBlob);
 
         if (uploadError) throw uploadError;
 
-        const { error: dbError } = await supabase
+        const { error: dbError } = await sb
           .from('property_photos')
           .insert([{ property_id: propId, storage_path: storagePath, display_order: i }]);
 
@@ -1029,8 +1029,8 @@
       const deletedPhotos = tempPhotos.filter(p => p.deleted);
       for (const photo of deletedPhotos) {
         if (photo.storage_path) {
-          await supabase.storage.from('property-photos').remove([photo.storage_path]);
-          const { error: dbError } = await supabase
+          await sb.storage.from('property-photos').remove([photo.storage_path]);
+          const { error: dbError } = await sb
             .from('property_photos')
             .delete()
             .eq('id', photo.id);
@@ -1054,11 +1054,11 @@
         // Delete all photos from storage
         if (prop && prop.property_photos) {
           for (const photo of prop.property_photos) {
-            await supabase.storage.from('property-photos').remove([photo.storage_path]);
+            await sb.storage.from('property-photos').remove([photo.storage_path]);
           }
         }
 
-        const { error } = await supabase.from('properties').delete().eq('id', id);
+        const { error } = await sb.from('properties').delete().eq('id', id);
         if (error) throw error;
         showToast('房源已刪除', 'success');
         closeConfirm();
@@ -1178,7 +1178,7 @@
   // ===== TENANTS =====
   async function loadTenants() {
     try {
-      const { data, error } = await supabase
+      const { data, error } = await sb
         .from('tenants')
         .select('*')
         .order('created_at', { ascending: false });
@@ -1280,13 +1280,13 @@
       const tenantData = { name, phone, email, property, start_date, end_date, rent, status, updated_at: new Date() };
 
       if (id) {
-        const { error } = await supabase
+        const { error } = await sb
           .from('tenants')
           .update(tenantData)
           .eq('id', parseInt(id));
         if (error) throw error;
       } else {
-        const { error } = await supabase
+        const { error } = await sb
           .from('tenants')
           .insert([tenantData]);
         if (error) throw error;
@@ -1303,7 +1303,7 @@
   function deleteTenant(id) {
     deleteCallback = async () => {
       try {
-        const { error } = await supabase.from('tenants').delete().eq('id', id);
+        const { error } = await sb.from('tenants').delete().eq('id', id);
         if (error) throw error;
         showToast('租客已刪除', 'success');
         closeConfirm();
