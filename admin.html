@@ -882,7 +882,13 @@
     tempPhotos = [];
   }
 
+  let isSaving = false;
   async function saveProperty() {
+    if (isSaving) return;
+    isSaving = true;
+    const saveBtn = document.querySelector('#modal .btn-gold');
+    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '⏳ 儲存中...'; }
+
     const id = document.getElementById('edit-id').value;
     const title = document.getElementById('f-title').value.trim();
     const price = document.getElementById('f-price').value.trim();
@@ -898,6 +904,8 @@
 
     if (!title || !price || !location) {
       showToast('請填寫房源名稱、月租金和地點', 'error');
+      isSaving = false;
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '💾 儲存'; }
       return;
     }
 
@@ -959,6 +967,9 @@
       await loadProperties();
     } catch (error) {
       showToast('儲存失敗: ' + error.message, 'error');
+    } finally {
+      isSaving = false;
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '💾 儲存'; }
     }
   }
 
