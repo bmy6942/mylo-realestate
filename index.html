@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>麥落不動產 | MYLO Real Estate</title>
+  <title>麥落不動產 - 專業包租代管 | MYLO Real Estate</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -35,7 +35,7 @@
     }
     .nav-logo-text { color: var(--white); font-size: 18px; font-weight: 700; letter-spacing: 1px; }
     .nav-logo-text span { color: var(--gold); }
-    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links { display: flex; gap: 28px; list-style: none; }
     .nav-links a {
       color: rgba(255,255,255,0.85); text-decoration: none;
       font-size: 14px; letter-spacing: 0.5px;
@@ -75,13 +75,13 @@
       margin-bottom: 24px;
     }
     .hero h1 {
-      font-size: 64px; font-weight: 900; color: var(--white);
-      line-height: 1.1; margin-bottom: 16px;
+      font-size: 58px; font-weight: 900; color: var(--white);
+      line-height: 1.15; margin-bottom: 16px;
     }
     .hero h1 span { color: var(--gold); }
     .hero-sub {
-      font-size: 18px; color: rgba(255,255,255,0.7);
-      margin-bottom: 40px; line-height: 1.7; max-width: 560px; margin-left: auto; margin-right: auto;
+      font-size: 17px; color: rgba(255,255,255,0.7);
+      margin-bottom: 40px; line-height: 1.8; max-width: 580px; margin-left: auto; margin-right: auto;
     }
     .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
     .btn-primary {
@@ -102,21 +102,81 @@
     }
     .stat-item { text-align: center; }
     .stat-number { font-size: 36px; font-weight: 900; color: var(--gold); }
+    .stat-unit { font-size: 14px; color: rgba(255,255,255,0.5); }
     .stat-label { font-size: 13px; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
 
-    /* PROPERTIES SECTION */
-    section {
-      padding: 80px 60px;
-    }
+    /* SECTIONS */
+    section { padding: 80px 60px; }
     section > h2 {
-      font-size: 42px; font-weight: 900; color: var(--navy);
+      font-size: 38px; font-weight: 900; color: var(--navy);
       text-align: center; margin-bottom: 14px;
     }
     section > h2 span { color: var(--gold); }
-    section > p {
+    section > p.section-desc {
       font-size: 16px; color: var(--text-light); text-align: center;
-      margin-bottom: 50px; line-height: 1.6;
+      margin-bottom: 50px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto;
     }
+
+    /* ABOUT SECTION */
+    #about { background: var(--gray); }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .about-text h3 {
+      font-size: 28px; font-weight: 900; color: var(--navy); margin-bottom: 16px;
+    }
+    .about-text h3 span { color: var(--gold); }
+    .about-text > p {
+      font-size: 15px; color: var(--text-light); line-height: 1.8; margin-bottom: 30px;
+    }
+    .about-pillars { display: flex; flex-direction: column; gap: 20px; }
+    .pillar {
+      background: var(--white); padding: 20px 24px; border-radius: 10px;
+      border-left: 4px solid var(--gold);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .pillar h4 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .pillar p { font-size: 14px; color: var(--text-light); line-height: 1.6; }
+    .about-quote {
+      background: var(--navy); border-radius: 12px; padding: 40px;
+      color: var(--white); position: relative;
+    }
+    .about-quote::before {
+      content: '\201C'; font-size: 80px; color: var(--gold); position: absolute;
+      top: 10px; left: 20px; line-height: 1; opacity: 0.5;
+    }
+    .about-quote p {
+      font-size: 17px; line-height: 1.8; color: rgba(255,255,255,0.85);
+      font-style: italic; margin-bottom: 16px; padding-left: 30px;
+    }
+    .about-quote .quote-author {
+      font-size: 13px; color: var(--gold); text-align: right; font-style: normal;
+      letter-spacing: 1px;
+    }
+
+    /* SERVICES SECTION */
+    .services-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .service-group {
+      background: var(--white); border-radius: 12px; padding: 36px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    .service-group h3 {
+      font-size: 20px; font-weight: 800; color: var(--navy); margin-bottom: 6px;
+    }
+    .service-group h3 span { color: var(--gold); font-size: 14px; font-weight: 600; }
+    .service-group > .service-divider {
+      width: 50px; height: 3px; background: var(--gold); margin: 12px 0 20px;
+    }
+    .service-item { margin-bottom: 20px; }
+    .service-item:last-child { margin-bottom: 0; }
+    .service-item h4 { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .service-item p { font-size: 14px; color: var(--text-light); line-height: 1.7; }
+
+    /* PROPERTIES SECTION */
     .properties-grid {
       display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 30px;
@@ -133,12 +193,9 @@
     .property-img {
       width: 100%; height: 220px; background: var(--gray);
       display: flex; align-items: center; justify-content: center;
-      font-size: 80px; overflow: hidden; position: relative;
-      cursor: pointer;
+      font-size: 80px; overflow: hidden; position: relative; cursor: pointer;
     }
-    .property-img img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
+    .property-img img { width: 100%; height: 100%; object-fit: cover; }
     .property-tag {
       position: absolute; top: 12px; right: 12px;
       background: var(--gold); color: var(--navy);
@@ -150,26 +207,38 @@
       padding: 6px 12px; border-radius: 6px; font-size: 12px;
     }
     .property-info { padding: 20px; }
-    .property-price {
-      font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 8px;
-    }
-    .property-title {
-      font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 10px;
-    }
-    .property-loc {
-      font-size: 14px; color: var(--text-light); margin-bottom: 12px;
-    }
-    .property-meta {
-      display: flex; gap: 16px; font-size: 13px; color: var(--text-light);
-    }
+    .property-price { font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 8px; }
+    .property-title { font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+    .property-loc { font-size: 14px; color: var(--text-light); margin-bottom: 12px; }
+    .property-meta { display: flex; gap: 16px; font-size: 13px; color: var(--text-light); }
 
-    /* FADE-IN ANIMATION */
-    .fade-in {
-      opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s;
+    /* FAQ SECTION */
+    #faq { background: var(--gray); }
+    .faq-grid {
+      max-width: 800px; margin: 0 auto;
     }
-    .fade-in.visible {
-      opacity: 1; transform: translateY(0);
+    .faq-category { margin-bottom: 30px; }
+    .faq-category h3 {
+      font-size: 18px; font-weight: 800; color: var(--navy); margin-bottom: 14px;
+      padding-bottom: 8px; border-bottom: 2px solid var(--gold);
     }
+    .faq-item {
+      background: var(--white); border-radius: 8px; margin-bottom: 10px;
+      overflow: hidden; box-shadow: 0 1px 5px rgba(0,0,0,0.05);
+    }
+    .faq-q {
+      padding: 16px 20px; cursor: pointer; font-weight: 700; font-size: 15px;
+      color: var(--navy); display: flex; justify-content: space-between; align-items: center;
+      transition: background 0.2s;
+    }
+    .faq-q:hover { background: rgba(201,168,76,0.08); }
+    .faq-q::after { content: '+'; font-size: 20px; color: var(--gold); font-weight: 700; }
+    .faq-item.open .faq-q::after { content: '-'; }
+    .faq-a {
+      max-height: 0; overflow: hidden; transition: max-height 0.3s ease;
+      padding: 0 20px; font-size: 14px; color: var(--text-light); line-height: 1.7;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 20px 16px; }
 
     /* CONTACT SECTION */
     #contact {
@@ -177,46 +246,49 @@
       color: var(--white);
     }
     #contact h2 { color: var(--white); }
-    #contact > p { color: rgba(255,255,255,0.7); }
+    #contact > p.section-desc { color: rgba(255,255,255,0.7); }
     .contact-container {
       display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-bottom: 40px;
     }
     .contact-info-group { margin-bottom: 30px; }
-    .contact-info-group h3 {
-      font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--gold);
-    }
-    .contact-info-group p {
-      font-size: 14px; color: rgba(255,255,255,0.8);
-    }
+    .contact-info-group h3 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--gold); }
+    .contact-info-group p { font-size: 14px; color: rgba(255,255,255,0.8); }
+    .contact-info-group a { color: var(--gold); text-decoration: none; }
+    .contact-info-group a:hover { text-decoration: underline; }
     .contact-form {
       background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px;
       backdrop-filter: blur(10px);
     }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-group label {
-      display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.9);
-    }
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.9); }
+    .form-group input, .form-group select, .form-group textarea {
       width: 100%; padding: 10px 14px; border: 1px solid rgba(201,168,76,0.4);
       border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--white);
       font-family: inherit; font-size: 14px;
     }
-    .form-group input::placeholder,
-    .form-group textarea::placeholder {
-      color: rgba(255,255,255,0.5);
-    }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: rgba(255,255,255,0.5); }
     .form-group select { color: rgba(255,255,255,0.7); }
     .form-submit {
       width: 100%; background: var(--gold); color: var(--navy);
       padding: 12px; border: none; border-radius: 6px;
-      font-size: 16px; font-weight: 700; cursor: pointer;
-      transition: background 0.3s;
+      font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.3s;
     }
     .form-submit:hover { background: var(--gold-light); }
+    .line-cta {
+      text-align: center; margin-top: 40px; padding: 30px;
+      background: rgba(201,168,76,0.1); border-radius: 12px; border: 1px solid rgba(201,168,76,0.3);
+    }
+    .line-cta p { font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 16px; }
+    .line-cta a {
+      display: inline-block; background: #06C755; color: var(--white);
+      padding: 12px 32px; border-radius: 8px; font-size: 16px; font-weight: 700;
+      text-decoration: none; transition: opacity 0.3s;
+    }
+    .line-cta a:hover { opacity: 0.85; }
+
+    /* FADE-IN */
+    .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s; }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
 
     /* LIGHTBOX */
     .lightbox-overlay {
@@ -231,27 +303,18 @@
     }
     .lightbox-main {
       display: flex; align-items: center; justify-content: center;
-      gap: 20px; position: relative; width: 90%; max-width: 900px;
-      height: 70vh;
+      gap: 20px; position: relative; width: 90%; max-width: 900px; height: 70vh;
     }
-    .lightbox-main img {
-      max-width: 100%; max-height: 100%; object-fit: contain;
-    }
-    .lightbox-main iframe {
-      width: 100%; height: 100%; border: none;
-    }
+    .lightbox-main img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .lightbox-main iframe { width: 100%; height: 100%; border: none; }
     .lightbox-nav {
       background: rgba(255,255,255,0.2); border: none; color: var(--white);
       width: 50px; height: 50px; border-radius: 50%;
       font-size: 24px; cursor: pointer; display: flex;
-      align-items: center; justify-content: center;
-      transition: background 0.3s;
+      align-items: center; justify-content: center; transition: background 0.3s;
     }
     .lightbox-nav:hover { background: rgba(255,255,255,0.4); }
-    .lightbox-thumbs {
-      display: flex; gap: 12px; justify-content: center;
-      margin-top: 20px; flex-wrap: wrap;
-    }
+    .lightbox-thumbs { display: flex; gap: 12px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
     .lightbox-thumb {
       width: 70px; height: 70px; border: 2px solid transparent;
       border-radius: 6px; overflow: hidden; cursor: pointer;
@@ -259,9 +322,7 @@
       background: rgba(255,255,255,0.1); transition: border-color 0.3s;
     }
     .lightbox-thumb.active { border-color: var(--gold); }
-    .lightbox-thumb img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
+    .lightbox-thumb img { width: 100%; height: 100%; object-fit: cover; }
     .video-thumb { font-size: 20px; color: var(--white); }
     .lightbox-title {
       position: absolute; bottom: -50px; left: 50%;
@@ -272,16 +333,33 @@
     /* FOOTER */
     footer {
       background: var(--navy); color: rgba(255,255,255,0.6);
-      text-align: center; padding: 30px 20px; font-size: 13px;
+      padding: 40px 60px; font-size: 13px;
     }
-    footer a { color: var(--gold); text-decoration: none; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr; gap: 40px; margin-bottom: 30px;
+    }
+    .footer-brand p { font-size: 14px; line-height: 1.8; color: rgba(255,255,255,0.6); margin-top: 12px; max-width: 400px; }
+    .footer-contact h4 { color: var(--gold); font-size: 14px; margin-bottom: 12px; }
+    .footer-contact p { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 6px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .footer-bottom a { color: var(--gold); text-decoration: none; }
+    .footer-motto { color: var(--gold); font-size: 12px; letter-spacing: 2px; }
 
     /* RESPONSIVE */
     @media (max-width: 768px) {
       nav { padding: 0 20px; }
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: 12px; }
       section { padding: 50px 20px; }
-      .hero h1 { font-size: 42px; }
+      .hero h1 { font-size: 36px; }
+      .about-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
       .contact-container { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; }
       .lightbox-main { width: 95%; }
       .lightbox-title { bottom: -40px; font-size: 12px; }
     }
@@ -292,13 +370,16 @@
 <nav>
   <a href="#" class="nav-logo">
     <div class="nav-logo-icon">M</div>
-    <span class="nav-logo-text">麥落 <span>Real Estate</span></span>
+    <span class="nav-logo-text">麥落 <span>不動產</span></span>
   </a>
   <ul class="nav-links">
-    <li><a href="#properties">房源</a></li>
-    <li><a href="#contact">聯繫</a></li>
+    <li><a href="#about">關於麥落</a></li>
+    <li><a href="#services">服務範疇</a></li>
+    <li><a href="#properties">精選房源</a></li>
+    <li><a href="#faq">常見問題</a></li>
+    <li><a href="#contact">聯絡我們</a></li>
   </ul>
-  <button class="nav-btn">後台登入</button>
+  <a href="https://line.me/R/ti/p/@mylovetribe" target="_blank" class="nav-btn">立即諮詢</a>
 </nav>
 
 <!-- HERO -->
@@ -306,27 +387,95 @@
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-content">
-    <div class="hero-badge">🏠 精選房源</div>
-    <h1>探索 <span>理想家園</span></h1>
+    <div class="hero-badge">Mylo Assets // 始於 2017</div>
+    <h1>以建築之序<br><span>築生活之暖</span></h1>
     <p class="hero-sub">
-      我們提供精選的房屋出租和出售服務，幫助您找到最適合的不動產。
+      專業包租代管。深耕三重區，我們以職人精神融合現代管理，為每一位房東守護資產價值，為每一位房客尋找家的歸屬。
     </p>
     <div class="hero-btns">
-      <a href="#properties" class="btn-primary">瀏覽房源</a>
-      <a href="#contact" class="btn-outline">聯繫我們</a>
+      <a href="#contact" class="btn-primary">預約諮詢</a>
+      <a href="#properties" class="btn-outline">精選房源清單</a>
     </div>
     <div class="hero-stats">
       <div class="stat-item">
-        <div class="stat-number">500+</div>
-        <div class="stat-label">滿意顧客</div>
+        <div class="stat-number">3,000+</div>
+        <div class="stat-unit">萬 TWD</div>
+        <div class="stat-label">管理資產規模</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number">1000+</div>
-        <div class="stat-label">成功案例</div>
+        <div class="stat-number">98.5</div>
+        <div class="stat-unit">%</div>
+        <div class="stat-label">物件滿租率</div>
       </div>
       <div class="stat-item">
-        <div class="stat-number">20+</div>
-        <div class="stat-label">專業團隊</div>
+        <div class="stat-number">7.2</div>
+        <div class="stat-unit">DAYS</div>
+        <div class="stat-label">平均成交速度</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">85</div>
+        <div class="stat-unit">%</div>
+        <div class="stat-label">租客續租意願</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>職人與 <span>家的故事</span></h2>
+  <p class="section-desc">我們深信，好的空間能療癒人心。麥落以日系極簡與精密維運，在喧囂的城市中築起一處處溫暖港灣。</p>
+  <div class="about-grid">
+    <div class="about-text fade-in">
+      <div class="about-pillars">
+        <div class="pillar">
+          <h4>職人級維運 CRAFTSMANSHIP</h4>
+          <p>我們視您的房產如當代建築精品。從細微的五金檢修到整體的空間氣氛營造，皆以日系標準進行嚴格把關。</p>
+        </div>
+        <div class="pillar">
+          <h4>安心感契約 TRUST & SAFETY</h4>
+          <p>嚴謹的法規遵循是我們的底線。透過透明的點交流程與法律保障，讓房東與房客在契合的關係中建立長久連結。</p>
+        </div>
+        <div class="pillar">
+          <h4>空間溫度設計 AMBIANCE</h4>
+          <p>不只是租屋，而是「家」的延伸。透過軟裝佈置與自然材質的運用，賦予老建築新生命，創造溢價的高回報率。</p>
+        </div>
+      </div>
+    </div>
+    <div class="about-quote fade-in">
+      <p>資產管理不應只是數字的流動，更應是空間與人情溫度的延續。</p>
+      <div class="quote-author">麥落團隊 // 專業顧問群 敬上</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <h2>兩全其美的 <span>代管方案</span></h2>
+  <p class="section-desc">針對屋主的需求與房客的期盼，我們提供專業且極具溫度的雙向服務。</p>
+  <div class="services-grid">
+    <div class="service-group fade-in">
+      <h3>屋主委託 <span>For Landlords</span></h3>
+      <div class="service-divider"></div>
+      <div class="service-item">
+        <h4>全責包租方案</h4>
+        <p>我們承擔所有空置風險與維護責任。每月固定時間撥付租金，讓您的資產收益如日出般穩定無虞。</p>
+      </div>
+      <div class="service-item">
+        <h4>優質代管服務</h4>
+        <p>專業的租務管家體系。處理房客篩選、疑難雜症至大型修繕，將繁瑣轉化為優雅的資產增值過程。</p>
+      </div>
+    </div>
+    <div class="service-group fade-in">
+      <h3>房客找房 <span>For Tenants</span></h3>
+      <div class="service-divider"></div>
+      <div class="service-item">
+        <h4>日系美學房源</h4>
+        <p>嚴選具備採光、通風與設計感的居住空間。每一間房都經過職人清潔與檢核，確保點交即入住。</p>
+      </div>
+      <div class="service-item">
+        <h4>24H 響應維護</h4>
+        <p>透過官方 LINE 平台，專業修繕團隊隨時待命。我們重視每一位房客的居住尊嚴與舒適度。</p>
       </div>
     </div>
   </div>
@@ -334,32 +483,77 @@
 
 <!-- PROPERTIES -->
 <section id="properties">
-  <h2>精選 <span>房源</span></h2>
-  <p>最新上架的優質房源，快速瀏覽您心儀的物業</p>
+  <h2>精選 <span>日系房源</span></h2>
+  <p class="section-desc">每一間房源皆經過 54 項專業環境檢測，只為給您最安心的歸處。</p>
   <div class="properties-grid" id="properties-list"></div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <h2>常見 <span>問題</span></h2>
+  <p class="section-desc">以下整理了房東與房客最常詢問的問題</p>
+  <div class="faq-grid">
+    <div class="faq-category">
+      <h3>費用與合約</h3>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">找房需要支付仲介費或服務費嗎？</div>
+        <div class="faq-a">大多數由本公司「包租」的案件，我們不向房客收取任何仲介服務費！我們致力於提供透明且無負擔的找房體驗。</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">租金包含哪些項目？電費如何計算？</div>
+        <div class="faq-a">管理費、水費、網路費均會於合約中詳細列明。電費依台電帳單或合約約定透明收取，絕無黑箱。</div>
+      </div>
+    </div>
+    <div class="faq-category">
+      <h3>權益與補助</h3>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">可以申請租金補貼嗎？</div>
+        <div class="faq-a">當然可以。我們完全支持房客依法申請補貼，並會提供完整的合約與權狀影本配合辦理。</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">可以遷入戶籍嗎？</div>
+        <div class="faq-a">合法遷入戶籍是房客的權利。我們配合規定提供證明資料，讓您住得踏實、安心。</div>
+      </div>
+    </div>
+    <div class="faq-category">
+      <h3>維修保養</h3>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">設備壞掉了該如何通報？</div>
+        <div class="faq-a">請直接聯繫官方 LINE 報修！我們的職人工班將於第一時間與您預約時間，確保居住品質。</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">退租點交流程複雜嗎？</div>
+        <div class="faq-a">不複雜。我們有清晰的點交清冊，只要依合約清空並完成清潔，押金將於當日快速退還。</div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- CONTACT -->
 <section id="contact">
-  <h2>聯繫 <span>我們</span></h2>
-  <p>有任何問題或需求，歡迎與我們聯繫</p>
+  <h2>聯絡 <span>我們</span></h2>
+  <p class="section-desc">有任何問題或需求，歡迎與我們聯繫</p>
   <div class="contact-container">
     <div>
       <div class="contact-info-group">
         <h3>電話</h3>
-        <p>(02) 2699-1234</p>
+        <p>02-2857-0717</p>
       </div>
       <div class="contact-info-group">
         <h3>電子郵件</h3>
-        <p>info@mylo-realestate.com</p>
+        <p>mylovetribe@gmail.com</p>
       </div>
       <div class="contact-info-group">
         <h3>地址</h3>
-        <p>新北市新莊區建國路123號</p>
+        <p>新北市三重區仁華街12號1樓</p>
       </div>
       <div class="contact-info-group">
         <h3>營業時間</h3>
         <p>週一至週六 09:00 – 18:00</p>
+      </div>
+      <div class="contact-info-group">
+        <h3>LINE 官方帳號</h3>
+        <p><a href="https://line.me/R/ti/p/@mylovetribe" target="_blank">@mylovetribe</a></p>
       </div>
     </div>
     <div class="fade-in">
@@ -389,6 +583,10 @@
       </div>
     </div>
   </div>
+  <div class="line-cta">
+    <p>仍有疑問？歡迎直接連繫資產經理人</p>
+    <a href="https://line.me/R/ti/p/@mylovetribe" target="_blank">LINE 連線資產經理人</a>
+  </div>
 </section>
 
 <!-- LIGHTBOX -->
@@ -405,7 +603,25 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2024 麥落不動產 MYLO Real Estate. All Rights Reserved. | <a href="admin.html">後台管理</a></p>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" style="margin-bottom:8px;">
+        <div class="nav-logo-icon">M</div>
+        <span class="nav-logo-text">麥落 <span>不動產</span></span>
+      </a>
+      <p>以職人之手，溫暖每一座資產。新北市租賃住宅服務業優選，為您在城市中尋得一處寧靜。</p>
+    </div>
+    <div class="footer-contact">
+      <h4>聯繫渠道</h4>
+      <p>02-2857-0717</p>
+      <p>mylovetribe@gmail.com</p>
+      <p>新北市三重區仁華街12號1樓</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 麥落不動產管理顧問有限公司 | <a href="admin.html">後台管理</a></span>
+    <span class="footer-motto">誠信・職人・溫暖・效率</span>
+  </div>
 </footer>
 
 <!-- SUPABASE JS SDK -->
@@ -427,14 +643,13 @@
         .from('properties')
         .select('*, property_photos(*)')
         .order('created_at', { ascending: false })
-        .limit(3);
+        .limit(6);
 
       if (error) {
         console.error('Error loading properties:', error);
         return null;
       }
 
-      // Map property_photos to photos array with full URLs
       return data.map(property => ({
         ...property,
         photos: (property.property_photos || [])
@@ -461,20 +676,18 @@
     const container = document.getElementById('properties-list');
 
     if (!props || props.length === 0) {
-      container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Unable to load properties. Please try again later.</p>';
+      container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">目前尚無房源，請稍後再來查看。</p>';
       return;
     }
 
-    const displayed = props.slice(0, 3);
-    container.innerHTML = displayed.map((p, idx) => {
+    container.innerHTML = props.map((p, idx) => {
       const hasPhotos = p.photos && p.photos.length;
       const photoCount = hasPhotos ? p.photos.length : 0;
       const hasVideo = !!p.video;
       const mediaBadge = (photoCount || hasVideo) ?
         `<div class="property-media-badge">${photoCount ? '📷 ' + photoCount : ''}${hasVideo ? ' 🎬' : ''}</div>` : '';
       const imgContent = hasPhotos ?
-        `<img src="${p.photos[0]}" alt="${p.title}" />` :
-        (p.icon || '🏠');
+        `<img src="${p.photos[0]}" alt="${p.title}" />` : '🏠';
       const clickAction = (hasPhotos || hasVideo) ?
         `onclick="openLightbox(${idx})"` : '';
       return `
@@ -505,25 +718,16 @@
   async function openLightbox(propIdx) {
     const props = await loadProperties();
     if (!props || !props[propIdx]) return;
-
     const p = props[propIdx];
     const items = [];
-
-    // Add photos
     (p.photos || []).forEach((src, i) => {
       items.push({ type: 'image', src, label: `照片 ${i + 1}` });
     });
-
-    // Add video
     if (p.video) {
       const embedUrl = getYouTubeEmbedUrl(p.video);
-      if (embedUrl) {
-        items.push({ type: 'video', src: embedUrl, label: '影片' });
-      }
+      if (embedUrl) items.push({ type: 'video', src: embedUrl, label: '影片' });
     }
-
     if (!items.length) return;
-
     lightboxData = { items, currentIndex: 0, title: p.title };
     renderLightbox();
     document.getElementById('lightbox').classList.add('open');
@@ -533,7 +737,6 @@
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open');
     document.body.style.overflow = '';
-    // Remove any iframe
     const main = document.getElementById('lightbox-main');
     const iframe = main.querySelector('iframe');
     if (iframe) iframe.remove();
@@ -555,11 +758,8 @@
     const item = items[currentIndex];
     const main = document.getElementById('lightbox-main');
     const img = document.getElementById('lightbox-img');
-
-    // Remove old iframe if any
     const oldIframe = main.querySelector('iframe');
     if (oldIframe) oldIframe.remove();
-
     if (item.type === 'image') {
       img.style.display = 'block';
       img.src = item.src;
@@ -571,14 +771,10 @@
       iframe.setAttribute('allow', 'autoplay; encrypted-media');
       main.insertBefore(iframe, main.children[1]);
     }
-
-    // Nav buttons visibility
     const prevBtn = main.querySelector('.prev');
     const nextBtn = main.querySelector('.next');
     prevBtn.style.display = items.length > 1 ? 'flex' : 'none';
     nextBtn.style.display = items.length > 1 ? 'flex' : 'none';
-
-    // Thumbs
     const thumbsContainer = document.getElementById('lightbox-thumbs');
     thumbsContainer.innerHTML = items.map((it, i) => {
       if (it.type === 'video') {
@@ -586,12 +782,9 @@
       }
       return `<div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" onclick="lightboxGoTo(${i})"><img src="${it.src}" /></div>`;
     }).join('');
-
-    // Title
     document.getElementById('lightbox-title').textContent = `${title} — ${item.label} (${currentIndex + 1}/${items.length})`;
   }
 
-  // Close lightbox on overlay click or ESC
   document.getElementById('lightbox').addEventListener('click', e => {
     if (e.target === e.currentTarget) closeLightbox();
   });
