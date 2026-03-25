@@ -1396,6 +1396,25 @@
   function confirmDelete() {
     if (deleteCallback) deleteCallback();
   }
+
+  // Expose functions to global scope for onclick handlers
+  window.toggleSignupMode = toggleSignupMode;
+  window.doLogin = doLogin;
+  window.doLogout = doLogout;
+  window.showPage = showPage;
+  window.openModal = openModal;
+  window.closeModal = closeModal;
+  window.editProperty = editProperty;
+  window.saveProperty = saveProperty;
+  window.deleteProperty = deleteProperty;
+  window.confirmDelete = confirmDelete;
+  window.closeConfirm = closeConfirm;
+  window.removePhoto = removePhoto;
+  window.openTenantModal = openTenantModal;
+  window.editTenant = editTenant;
+  window.closeTenantModal = closeTenantModal;
+  window.saveTenant = saveTenant;
+  window.deleteTenant = deleteTenant;
 </script>
 
 </body>
