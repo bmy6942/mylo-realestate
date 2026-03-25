@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>後台管理系統 | 麥落不動產</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #0d1b2a;
+      --navy2: #1b2d42;
+      --gold: #c9a84c;
+      --gold-light: #e8c87a;
+      --white: #ffffff;
+      --gray: #f4f6f9;
+      --border: #e5e7eb;
+      --text: #1f2937;
+      --text-light: #6b7280;
+      --green: #10b981;
+      --red: #ef4444;
+      --orange: #f59e0b;
+      --blue: #3b82f6;
+    }
+    body { font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; background: var(--gray); color: var(--text); }
+
+    /* ========== LOGIN PAGE ========== */
+    #login-page {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy2) 100%);
+      position: relative; overflow: hidden;
+    }
+    .login-bg {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .login-card {
+      position: relative; background: white; border-radius: 20px;
+      padding: 48px 44px; width: 420px; max-width: 95vw;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+    .login-logo { text-align: center; margin-bottom: 32px; }
+    .login-logo-icon {
+      width: 60px; height: 60px; background: var(--navy);
+      border-radius: 14px; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; font-weight: 900; color: var(--gold);
+      margin: 0 auto 14px;
+    }
+    .login-logo h1 { font-size: 22px; font-weight: 800; color: var(--navy); }
+    .login-logo p { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+    .login-form .form-group { margin-bottom: 18px; }
+    .login-form label { display: block; font-size: 13px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .login-form input {
+      width: 100%; padding: 12px 16px; border: 2px solid var(--border);
+      border-radius: 10px; font-size: 15px; transition: border 0.3s;
+      font-family: inherit;
+    }
+    .login-form input:focus { outline: none; border-color: var(--gold); }
+    .login-btn {
+      width: 100%; background: var(--navy); color: white;
+      border: none; padding: 14px; border-radius: 10px;
+      font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.3s;
+      margin-top: 8px;
+    }
+    .login-btn:hover { background: var(--gold); color: var(--navy); }
+    .login-hint {
+      text-align: center; margin-top: 20px; padding: 12px 16px;
+      background: #fef9ec; border-radius: 8px; border: 1px solid #fde68a;
+    }
+    .login-hint p { font-size: 12px; color: #92400e; }
+    .login-hint strong { color: var(--navy); }
+    .login-error {
+      background: #fef2f2; border: 1px solid #fecaca;
+      color: #dc2626; padding: 10px 14px; border-radius: 8px;
+      font-size: 13px; margin-bottom: 16px; display: none;
+    }
+    .signup-link {
+      text-align: center; margin-top: 16px;
+    }
+    .signup-link a {
+      font-size: 13px; color: var(--text-light); text-decoration: none;
+      cursor: pointer;
+    }
+    .signup-link a:hover { color: var(--gold); }
+    .back-link { text-align: center; margin-top: 16px; }
+    .back-link a { font-size: 13px; color: var(--text-light); text-decoration: none; }
+    .back-link a:hover { color: var(--gold); }
+
+    /* ========== ADMIN LAYOUT ========== */
+    #admin-page { display: none; min-height: 100vh; }
+    .admin-layout { display: flex; min-height: 100vh; }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px; background: var(--navy); flex-shrink: 0;
+      display: flex; flex-direction: column; position: fixed;
+      top: 0; left: 0; height: 100vh; z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 24px 20px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .sidebar-logo-icon {
+      width: 38px; height: 38px; background: var(--gold);
+      border-radius: 8px; display: flex; align-items: center;
+      justify-content: center; font-weight: 900; color: var(--navy); font-size: 18px;
+    }
+    .sidebar-logo-text { color: white; font-size: 15px; font-weight: 700; }
+    .sidebar-logo-text small { display: block; font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 400; }
+    .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .sidebar-section-label { font-size: 10px; color: rgba(255,255,255,0.3); letter-spacing: 2px; padding: 12px 8px 6px; }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 12px; border-radius: 8px; cursor: pointer;
+      color: rgba(255,255,255,0.6); font-size: 14px; font-weight: 500;
+      transition: all 0.2s; margin-bottom: 2px;
+    }
+    .nav-item:hover { background: rgba(255,255,255,0.08); color: white; }
+    .nav-item.active { background: var(--gold); color: var(--navy); font-weight: 700; }
+    .nav-item .nav-icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-footer {
+      padding: 16px 12px; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .user-info { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .user-avatar {
+      width: 36px; height: 36px; background: var(--gold);
+      border-radius: 50%; display: flex; align-items: center;
+      justify-content: center; font-weight: 700; color: var(--navy); font-size: 14px;
+    }
+    .user-name { color: white; font-size: 13px; font-weight: 600; }
+    .user-role { font-size: 11px; color: rgba(255,255,255,0.4); }
+    .logout-btn {
+      width: 100%; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+      color: #fca5a5; padding: 8px; border-radius: 8px; font-size: 13px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .logout-btn:hover { background: rgba(239,68,68,0.2); color: #ef4444; }
+
+    /* Main content */
+    .main-content { margin-left: 260px; flex: 1; }
+    .topbar {
+      background: white; border-bottom: 1px solid var(--border);
+      padding: 0 28px; height: 64px; display: flex; align-items: center;
+      justify-content: space-between; position: sticky; top: 0; z-index: 50;
+    }
+    .topbar h2 { font-size: 18px; font-weight: 700; color: var(--text); }
+    .topbar-actions { display: flex; align-items: center; gap: 12px; }
+    .topbar-date { font-size: 13px; color: var(--text-light); }
+
+    /* Content area */
+    .content { padding: 28px; }
+
+    /* Pages */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Dashboard Stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+    .stat-card {
+      background: white; border-radius: 14px; padding: 22px 24px;
+      border: 1px solid var(--border); display: flex; align-items: center; gap: 16px;
+    }
+    .stat-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 22px;
+    }
+    .stat-icon.green { background: #d1fae5; }
+    .stat-icon.blue { background: #dbeafe; }
+    .stat-icon.orange { background: #fef3c7; }
+    .stat-icon.red { background: #fee2e2; }
+    .stat-num { font-size: 28px; font-weight: 900; color: var(--text); }
+    .stat-label { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+    .stat-change { font-size: 12px; margin-top: 4px; }
+    .stat-change.up { color: var(--green); }
+    .stat-change.down { color: var(--red); }
+
+    /* Table */
+    .card {
+      background: white; border-radius: 14px; border: 1px solid var(--border);
+      overflow: hidden; margin-bottom: 24px;
+    }
+    .card-header {
+      padding: 18px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-title { font-size: 16px; font-weight: 700; color: var(--text); }
+    .card-body { padding: 0; }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: var(--gray); padding: 12px 16px; text-align: left;
+      font-size: 12px; font-weight: 600; color: var(--text-light);
+      letter-spacing: 0.5px; border-bottom: 1px solid var(--border);
+    }
+    td { padding: 14px 16px; border-bottom: 1px solid #f3f4f6; font-size: 14px; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+    .badge {
+      display: inline-block; padding: 4px 10px; border-radius: 20px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-orange { background: #fef3c7; color: #92400e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.2s;
+    }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-navy { background: var(--navy); color: white; }
+    .btn-navy:hover { background: var(--navy2); }
+    .btn-red { background: #fee2e2; color: #dc2626; }
+    .btn-red:hover { background: #fecaca; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+
+    /* Search & Filter */
+    .toolbar {
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    }
+    .search-box {
+      flex: 1; min-width: 200px; padding: 9px 14px;
+      border: 2px solid var(--border); border-radius: 8px; font-size: 14px;
+      font-family: inherit;
+    }
+    .search-box:focus { outline: none; border-color: var(--gold); }
+    select.filter-select {
+      padding: 9px 14px; border: 2px solid var(--border); border-radius: 8px;
+      font-size: 14px; font-family: inherit; background: white; cursor: pointer;
+    }
+    select.filter-select:focus { outline: none; border-color: var(--gold); }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 1000;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white; border-radius: 16px; width: 560px; max-width: 95vw;
+      max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      padding: 20px 24px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; background: white;
+    }
+    .modal-title { font-size: 17px; font-weight: 700; }
+    .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-light); padding: 4px; }
+    .modal-body { padding: 24px; }
+    .modal-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 10px; justify-content: flex-end; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 10px 14px; border: 2px solid var(--border);
+      border-radius: 8px; font-size: 14px; font-family: inherit;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: var(--gold);
+    }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+      background: var(--navy); color: white; padding: 14px 20px;
+      border-radius: 10px; font-size: 14px; font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      transform: translateY(80px); opacity: 0; transition: all 0.3s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { border-left: 4px solid var(--green); }
+    .toast.error { border-left: 4px solid var(--red); }
+
+    /* Empty state */
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-light); }
+    .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* Photo Upload */
+    .photo-upload-area {
+      border: 2px dashed var(--border); border-radius: 10px;
+      padding: 20px; text-align: center; cursor: pointer;
+      transition: all 0.3s; background: #fafafa; position: relative;
+    }
+    .photo-upload-area:hover { border-color: var(--gold); background: #fef9ec; }
+    .photo-upload-area.dragover { border-color: var(--gold); background: #fef9ec; }
+    .photo-upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .photo-upload-text { font-size: 13px; color: var(--text-light); }
+    .photo-upload-text strong { color: var(--gold); }
+    .photo-upload-hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+    .photo-upload-input { display: none; }
+    .photo-previews {
+      display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 12px;
+    }
+    .photo-preview-item {
+      position: relative; border-radius: 8px; overflow: hidden;
+      aspect-ratio: 1; border: 2px solid var(--border);
+    }
+    .photo-preview-item img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .photo-preview-item.cover::after {
+      content: '封面'; position: absolute; bottom: 0; left: 0; right: 0;
+      background: var(--gold); color: var(--navy); font-size: 10px;
+      font-weight: 700; text-align: center; padding: 2px;
+    }
+    .photo-preview-remove {
+      position: absolute; top: 4px; right: 4px;
+      width: 20px; height: 20px; background: rgba(0,0,0,0.6);
+      border: none; border-radius: 50%; color: white; font-size: 12px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      line-height: 1;
+    }
+    .photo-preview-remove:hover { background: var(--red); }
+    .photo-count { font-size: 12px; color: var(--text-light); margin-top: 6px; }
+    .video-url-hint { font-size: 11px; color: #aaa; margin-top: 4px; }
+    .photo-thumb {
+      width: 40px; height: 40px; object-fit: cover; border-radius: 4px;
+    }
+
+    /* Delete confirm */
+    .confirm-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5); z-index: 2000;
+      align-items: center; justify-content: center;
+    }
+    .confirm-overlay.open { display: flex; }
+    .confirm-box {
+      background: white; border-radius: 16px; padding: 32px;
+      width: 380px; max-width: 95vw; text-align: center;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    }
+    .confirm-icon { font-size: 48px; margin-bottom: 16px; }
+    .confirm-box h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .confirm-box p { color: var(--text-light); font-size: 14px; margin-bottom: 24px; }
+    .confirm-btns { display: flex; gap: 12px; justify-content: center; }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+  <div class="login-bg"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">M</div>
+      <h1>麥落不動產</h1>
+      <p>後台管理系統</p>
+    </div>
+    <div class="login-error" id="login-error"></div>
+    <div class="login-form">
+      <div class="form-group">
+        <label>管理員信箱</label>
+        <input type="email" id="email" placeholder="admin@mylo-realestate.com" />
+      </div>
+      <div class="form-group">
+        <label>密碼</label>
+        <input type="password" id="password" placeholder="請輸入密碼" />
+      </div>
+      <button class="login-btn" onclick="doLogin()">🔐 登入系統</button>
+    </div>
+    <div class="login-hint">
+      <p>首次使用？<a href="#" class="signup-link" onclick="toggleSignupMode(event)">建立帳號</a></p>
+    </div>
+    <div class="back-link">
+      <a href="index.html">← 返回官方網站</a>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div id="admin-page">
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">M</div>
+        <div class="sidebar-logo-text">
+          麥落不動產
+          <small>管理後台 v1.0</small>
+        </div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="sidebar-section-label">主要功能</div>
+        <div class="nav-item active" onclick="showPage('dashboard')">
+          <span class="nav-icon">📊</span> 儀表板總覽
+        </div>
+        <div class="nav-item" onclick="showPage('properties')">
+          <span class="nav-icon">🏠</span> 房源管理
+        </div>
+        <div class="nav-item" onclick="showPage('tenants')">
+          <span class="nav-icon">👥</span> 租客管理
+        </div>
+        <div class="sidebar-section-label">財務</div>
+        <div class="nav-item" onclick="showPage('finance')">
+          <span class="nav-icon">💰</span> 租金收支
+        </div>
+        <div class="sidebar-section-label">系統</div>
+        <div class="nav-item" onclick="window.open('index.html','_blank')">
+          <span class="nav-icon">🌐</span> 查看官網
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <div class="user-avatar" id="user-avatar">A</div>
+          <div>
+            <div class="user-name" id="user-name">管理員</div>
+            <div class="user-role">系統管理員</div>
+          </div>
+        </div>
+        <button class="logout-btn" onclick="doLogout()">🚪 登出系統</button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-content">
+      <div class="topbar">
+        <h2 id="page-title">儀表板總覽</h2>
+        <div class="topbar-actions">
+          <span class="topbar-date" id="topbar-date"></span>
+        </div>
+      </div>
+      <div class="content">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-icon green">🏠</div>
+              <div>
+                <div class="stat-num" id="stat-total">0</div>
+                <div class="stat-label">房源總數</div>
+                <div class="stat-change up">↑ 較上月 +2</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon blue">✅</div>
+              <div>
+                <div class="stat-num" id="stat-rented">0</div>
+                <div class="stat-label">已出租中</div>
+                <div class="stat-change up">↑ 出租率高</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon orange">🔓</div>
+              <div>
+                <div class="stat-num" id="stat-vacant">0</div>
+                <div class="stat-label">空置房源</div>
+                <div class="stat-change down">待媒合</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon red">💰</div>
+              <div>
+                <div class="stat-num" id="stat-revenue">$0</div>
+                <div class="stat-label">本月預估收益</div>
+                <div class="stat-change up">↑ 穩定收入</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">📋 最新房源列表</span>
+              <button class="btn btn-gold" onclick="showPage('properties')">管理房源 →</button>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th>房源名稱</th>
+                    <th>地點</th>
+                    <th>月租金</th>
+                    <th>坪數</th>
+                    <th>狀態</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboard-table">
+                  <tr><td colspan="5" style="text-align:center;color:#aaa;padding:30px">載入中...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROPERTIES -->
+        <div class="page" id="page-properties">
+          <div class="card">
+            <div class="card-header">
+              <div class="toolbar">
+                <input class="search-box" type="text" placeholder="🔍 搜尋房源名稱或地點..." id="search-input" oninput="renderPropertiesTable()" />
+                <select class="filter-select" id="filter-status" onchange="renderPropertiesTable()">
+                  <option value="">全部狀態</option>
+                  <option value="出租中">出租中</option>
+                  <option value="空置">空置</option>
+                  <option value="維修中">維修中</option>
+                </select>
+              </div>
+              <button class="btn btn-gold" onclick="openModal()">＋ 新增房源</button>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>房源名稱</th>
+                    <th>地點</th>
+                    <th>月租金</th>
+                    <th>坪數</th>
+                    <th>格局</th>
+                    <th>樓層</th>
+                    <th>狀態</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="properties-table">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- TENANTS -->
+        <div class="page" id="page-tenants">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">👥 租客管理</span>
+              <button class="btn btn-gold" onclick="openTenantModal()">＋ 新增租客</button>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr><th>#</th><th>租客姓名</th><th>聯絡電話</th><th>房源</th><th>租約起訖</th><th>月租金</th><th>狀態</th><th>操作</th></tr>
+                </thead>
+                <tbody id="tenants-table"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- FINANCE -->
+        <div class="page" id="page-finance">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">💰 租金收支記錄</span>
+            </div>
+            <div class="card-body">
+              <table>
+                <thead>
+                  <tr><th>#</th><th>月份</th><th>房源</th><th>租客</th><th>應收金額</th><th>繳納狀態</th><th>繳納日期</th></tr>
+                </thead>
+                <tbody id="finance-table">
+                  <tr><td colspan="7" style="text-align:center;padding:40px;color:#aaa">💡 請先在房源管理中新增房源與租客資料</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROPERTY MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">新增房源</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id" />
+      <div class="form-row">
+        <div class="form-group">
+          <label>房源名稱 *</label>
+          <input type="text" id="f-title" placeholder="例：新莊捷運站旁精裝套房" />
+        </div>
+        <div class="form-group">
+          <label>月租金（元）*</label>
+          <input type="text" id="f-price" placeholder="例：12,000" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>地點 *</label>
+          <input type="text" id="f-location" placeholder="例：新北市新莊區新莊路131號" />
+        </div>
+        <div class="form-group">
+          <label>坪數</label>
+          <input type="text" id="f-area" placeholder="例：18坪" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>格局</label>
+          <input type="text" id="f-rooms" placeholder="例：1房1衛" />
+        </div>
+        <div class="form-group">
+          <label>樓層</label>
+          <input type="text" id="f-floor" placeholder="例：5F/12F" />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>出租類型</label>
+          <select id="f-type">
+            <option>出租</option>
+            <option>出售</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>狀態</label>
+          <select id="f-status">
+            <option>出租中</option>
+            <option>空置</option>
+            <option>維修中</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>房源圖示（選填）</label>
+        <select id="f-icon">
+          <option value="🏠">🏠 一般住宅</option>
+          <option value="🏢">🏢 公寓大樓</option>
+          <option value="🏙️">🏙️ 市中心</option>
+          <option value="🏡">🏡 獨棟別墅</option>
+          <option value="🏬">🏬 商辦空間</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>房源照片（最多 10 張）</label>
+        <div class="photo-upload-area" id="photo-upload-area" onclick="document.getElementById('photo-input').click()">
+          <div class="photo-upload-icon">📷</div>
+          <div class="photo-upload-text">點擊上傳或<strong>拖曳照片</strong>到此處</div>
+          <div class="photo-upload-hint">支援 JPG、PNG，每張自動壓縮至 800px 寬度</div>
+          <input type="file" id="photo-input" class="photo-upload-input" accept="image/*" multiple onchange="handlePhotoUpload(event)" />
+        </div>
+        <div class="photo-previews" id="photo-previews"></div>
+        <div class="photo-count" id="photo-count"></div>
+      </div>
+      <div class="form-group">
+        <label>影片連結（選填）</label>
+        <input type="text" id="f-video" placeholder="貼上 YouTube 或其他影片網址" />
+        <div class="video-url-hint">支援 YouTube、Vimeo 等影片平台網址</div>
+      </div>
+      <div class="form-group">
+        <label>備註</label>
+        <textarea id="f-note" placeholder="其他補充說明..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-navy" onclick="closeModal()">取消</button>
+      <button class="btn btn-gold" onclick="saveProperty()">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- TENANT MODAL -->
+<div class="modal-overlay" id="tenant-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="tenant-modal-title">新增租客</span>
+      <button class="modal-close" onclick="closeTenantModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="t-edit-id" />
+      <div class="form-row">
+        <div class="form-group"><label>租客姓名 *</label><input type="text" id="t-name" placeholder="姓名" /></div>
+        <div class="form-group"><label>聯絡電話 *</label><input type="text" id="t-phone" placeholder="0912-345-678" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>電子信箱</label><input type="email" id="t-email" placeholder="email@example.com" /></div>
+        <div class="form-group">
+          <label>承租房源</label>
+          <select id="t-property"></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>租約開始</label><input type="date" id="t-start" /></div>
+        <div class="form-group"><label>租約結束</label><input type="date" id="t-end" /></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>月租金（元）</label><input type="text" id="t-rent" placeholder="12,000" /></div>
+        <div class="form-group">
+          <label>狀態</label>
+          <select id="t-status"><option>租約中</option><option>即將到期</option><option>已結束</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-navy" onclick="closeTenantModal()">取消</button>
+      <button class="btn btn-gold" onclick="saveTenant()">💾 儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-overlay" id="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-icon">🗑️</div>
+    <h3>確認刪除</h3>
+    <p id="confirm-message">確認要刪除嗎?</p>
+    <div class="confirm-btns">
+      <button class="btn btn-navy" onclick="closeConfirm()">取消</button>
+      <button class="btn btn-red" onclick="confirmDelete()">刪除</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
+
+<!-- Supabase JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // ===== SUPABASE SETUP =====
+  const SUPABASE_URL = 'https://ehvbuzxixaxwphlrszuw.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVodmJ1enhpeGF4d3BobHJzenV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjgxMjcsImV4cCI6MjA4OTk0NDEyN30.2XJiHQFurNoXlZ0LWJTsVZOYVI7RF1XhVeXMvX-E4aM';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ===== STATE =====
+  let currentUser = null;
+  let properties = [];
+  let tenants = [];
+  let tempPhotos = [];
+  let deleteCallback = null;
+  let isSignupMode = false;
+
+  // ===== INITIALIZATION =====
+  document.addEventListener('DOMContentLoaded', async () => {
+    await checkAuthState();
+    updateDate();
+    setInterval(updateDate, 60000);
+    setupPhotoUpload();
+    setupDragDrop();
+  });
+
+  supabase.auth.onAuthStateChange((event, session) => {
+    if (session) {
+      currentUser = session.user;
+      showAdminPage();
+    } else {
+      currentUser = null;
+      showLoginPage();
+    }
+  });
+
+  // ===== AUTH =====
+  async function checkAuthState() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      currentUser = session.user;
+      showAdminPage();
+    } else {
+      showLoginPage();
+    }
+  }
+
+  function toggleSignupMode(e) {
+    e.preventDefault();
+    isSignupMode = !isSignupMode;
+    const btn = document.querySelector('.login-btn');
+    const hint = document.querySelector('.login-hint');
+    if (isSignupMode) {
+      document.querySelector('.login-form label').textContent = '管理員信箱';
+      btn.textContent = '✨ 建立帳號';
+      hint.innerHTML = '<p>已有帳號？<a href="#" class="signup-link" onclick="toggleSignupMode(event)">返回登入</a></p>';
+    } else {
+      btn.textContent = '🔐 登入系統';
+      hint.innerHTML = '<p>首次使用？<a href="#" class="signup-link" onclick="toggleSignupMode(event)">建立帳號</a></p>';
+    }
+  }
+
+  async function doLogin() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('login-error');
+
+    if (!email || !password) {
+      errorDiv.style.display = 'block';
+      errorDiv.textContent = '請輸入信箱和密碼';
+      return;
+    }
+
+    try {
+      if (isSignupMode) {
+        const { error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        showToast('帳號建立成功，請登入', 'success');
+        isSignupMode = false;
+        document.querySelector('.login-btn').textContent = '🔐 登入系統';
+        document.querySelector('.login-hint').innerHTML = '<p>首次使用？<a href="#" class="signup-link" onclick="toggleSignupMode(event)">建立帳號</a></p>';
+        document.getElementById('password').value = '';
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+      }
+      errorDiv.style.display = 'none';
+    } catch (error) {
+      errorDiv.style.display = 'block';
+      errorDiv.textContent = error.message || '登入失敗，請檢查信箱和密碼';
+    }
+  }
+
+  async function doLogout() {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      currentUser = null;
+      showLoginPage();
+    } catch (error) {
+      showToast('登出失敗: ' + error.message, 'error');
+    }
+  }
+
+  function showLoginPage() {
+    document.getElementById('login-page').style.display = 'flex';
+    document.getElementById('admin-page').style.display = 'none';
+    document.getElementById('email').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('login-error').style.display = 'none';
+  }
+
+  async function showAdminPage() {
+    document.getElementById('login-page').style.display = 'none';
+    document.getElementById('admin-page').style.display = 'block';
+    const initials = currentUser.email.substring(0, 1).toUpperCase();
+    document.getElementById('user-avatar').textContent = initials;
+    document.getElementById('user-name').textContent = currentUser.email.split('@')[0];
+    await loadProperties();
+    await loadTenants();
+    await renderDashboard();
+  }
+
+  // ===== PROPERTIES =====
+  async function loadProperties() {
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*, property_photos(*)')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      properties = data || [];
+      await renderPropertiesTable();
+    } catch (error) {
+      showToast('載入房源失敗: ' + error.message, 'error');
+    }
+  }
+
+  function renderPropertiesTable() {
+    const tbody = document.getElementById('properties-table');
+    const searchText = document.getElementById('search-input').value.toLowerCase();
+    const filterStatus = document.getElementById('filter-status').value;
+
+    let filtered = properties.filter(p => {
+      const matchSearch = !searchText ||
+        p.title.toLowerCase().includes(searchText) ||
+        p.location.toLowerCase().includes(searchText);
+      const matchStatus = !filterStatus || p.status === filterStatus;
+      return matchSearch && matchStatus;
+    });
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#aaa">暫無房源</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = filtered.map((p, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            ${p.property_photos && p.property_photos.length > 0
+              ? `<img src="${getPublicPhotoUrl(p.property_photos[0].storage_path)}" class="photo-thumb" />`
+              : ''}
+            <span>${p.icon} ${p.title}</span>
+          </div>
+        </td>
+        <td>${p.location}</td>
+        <td>NT$${parseInt(p.price).toLocaleString()}</td>
+        <td>${p.area}</td>
+        <td>${p.rooms}</td>
+        <td>${p.floor}</td>
+        <td><span class="badge ${getStatusBadgeClass(p.status)}">${p.status}</span></td>
+        <td>
+          <button class="btn btn-sm btn-navy" onclick="editProperty(${p.id})">編輯</button>
+          <button class="btn btn-sm btn-red" onclick="deleteProperty(${p.id})">刪除</button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function getStatusBadgeClass(status) {
+    if (status === '出租中') return 'badge-green';
+    if (status === '空置') return 'badge-orange';
+    return 'badge-red';
+  }
+
+  function getPublicPhotoUrl(storagePath) {
+    return `${SUPABASE_URL}/storage/v1/object/public/property-photos/${storagePath}`;
+  }
+
+  function openModal() {
+    document.getElementById('edit-id').value = '';
+    document.getElementById('f-title').value = '';
+    document.getElementById('f-price').value = '';
+    document.getElementById('f-location').value = '';
+    document.getElementById('f-area').value = '';
+    document.getElementById('f-rooms').value = '';
+    document.getElementById('f-floor').value = '';
+    document.getElementById('f-type').value = '出租';
+    document.getElementById('f-status').value = '出租中';
+    document.getElementById('f-icon').value = '🏠';
+    document.getElementById('f-video').value = '';
+    document.getElementById('f-note').value = '';
+    tempPhotos = [];
+    document.getElementById('modal-title').textContent = '新增房源';
+    document.getElementById('photo-previews').innerHTML = '';
+    document.getElementById('photo-count').textContent = '';
+    document.getElementById('modal').classList.add('open');
+  }
+
+  async function editProperty(id) {
+    const prop = properties.find(p => p.id === id);
+    if (!prop) return;
+
+    document.getElementById('edit-id').value = prop.id;
+    document.getElementById('f-title').value = prop.title;
+    document.getElementById('f-price').value = prop.price;
+    document.getElementById('f-location').value = prop.location;
+    document.getElementById('f-area').value = prop.area;
+    document.getElementById('f-rooms').value = prop.rooms;
+    document.getElementById('f-floor').value = prop.floor;
+    document.getElementById('f-type').value = prop.type;
+    document.getElementById('f-status').value = prop.status;
+    document.getElementById('f-icon').value = prop.icon;
+    document.getElementById('f-video').value = prop.video || '';
+    document.getElementById('f-note').value = prop.note || '';
+
+    tempPhotos = (prop.property_photos || []).map(ph => ({
+      id: ph.id,
+      url: getPublicPhotoUrl(ph.storage_path),
+      storage_path: ph.storage_path,
+      display_order: ph.display_order,
+      isNew: false
+    }));
+
+    renderPhotoPreview();
+    document.getElementById('modal-title').textContent = '編輯房源';
+    document.getElementById('modal').classList.add('open');
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    tempPhotos = [];
+  }
+
+  async function saveProperty() {
+    const id = document.getElementById('edit-id').value;
+    const title = document.getElementById('f-title').value.trim();
+    const price = document.getElementById('f-price').value.trim();
+    const location = document.getElementById('f-location').value.trim();
+    const area = document.getElementById('f-area').value.trim();
+    const rooms = document.getElementById('f-rooms').value.trim();
+    const floor = document.getElementById('f-floor').value.trim();
+    const type = document.getElementById('f-type').value;
+    const status = document.getElementById('f-status').value;
+    const icon = document.getElementById('f-icon').value;
+    const video = document.getElementById('f-video').value.trim();
+    const note = document.getElementById('f-note').value.trim();
+
+    if (!title || !price || !location) {
+      showToast('請填寫房源名稱、月租金和地點', 'error');
+      return;
+    }
+
+    try {
+      let propId = id ? parseInt(id) : null;
+
+      if (id) {
+        // Update existing property
+        const { error } = await supabase
+          .from('properties')
+          .update({ title, price, location, area, rooms, floor, type, status, icon, video, note, updated_at: new Date() })
+          .eq('id', propId);
+        if (error) throw error;
+      } else {
+        // Create new property
+        const { data, error } = await supabase
+          .from('properties')
+          .insert([{ title, price, location, area, rooms, floor, type, status, icon, video, note }])
+          .select();
+        if (error) throw error;
+        propId = data[0].id;
+      }
+
+      // Handle photo uploads
+      const newPhotos = tempPhotos.filter(p => p.isNew);
+      for (let i = 0; i < newPhotos.length; i++) {
+        const photoBlob = newPhotos[i].blob;
+        const filename = newPhotos[i].file ? newPhotos[i].file.name : `photo_${Date.now()}_${i}.jpg`;
+        const storagePath = `${propId}/${Date.now()}_${filename}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from('property-photos')
+          .upload(storagePath, photoBlob);
+
+        if (uploadError) throw uploadError;
+
+        const { error: dbError } = await supabase
+          .from('property_photos')
+          .insert([{ property_id: propId, storage_path: storagePath, display_order: i }]);
+
+        if (dbError) throw dbError;
+      }
+
+      // Delete removed photos
+      const deletedPhotos = tempPhotos.filter(p => p.deleted);
+      for (const photo of deletedPhotos) {
+        if (photo.storage_path) {
+          await supabase.storage.from('property-photos').remove([photo.storage_path]);
+          const { error: dbError } = await supabase
+            .from('property_photos')
+            .delete()
+            .eq('id', photo.id);
+          if (dbError) console.error('Failed to delete photo record:', dbError);
+        }
+      }
+
+      showToast(id ? '房源已更新' : '房源已新增', 'success');
+      closeModal();
+      await loadProperties();
+    } catch (error) {
+      showToast('儲存失敗: ' + error.message, 'error');
+    }
+  }
+
+  function deleteProperty(id) {
+    deleteCallback = async () => {
+      try {
+        const prop = properties.find(p => p.id === id);
+
+        // Delete all photos from storage
+        if (prop && prop.property_photos) {
+          for (const photo of prop.property_photos) {
+            await supabase.storage.from('property-photos').remove([photo.storage_path]);
+          }
+        }
+
+        const { error } = await supabase.from('properties').delete().eq('id', id);
+        if (error) throw error;
+        showToast('房源已刪除', 'success');
+        closeConfirm();
+        await loadProperties();
+      } catch (error) {
+        showToast('刪除失敗: ' + error.message, 'error');
+        closeConfirm();
+      }
+    };
+    document.getElementById('confirm-message').textContent = '確認要刪除此房源及其所有照片嗎?';
+    document.getElementById('confirm-overlay').classList.add('open');
+  }
+
+  // ===== PHOTO UPLOAD =====
+  function setupPhotoUpload() {
+    const input = document.getElementById('photo-input');
+    input.addEventListener('change', handlePhotoUpload);
+  }
+
+  function setupDragDrop() {
+    const area = document.getElementById('photo-upload-area');
+    area.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      area.classList.add('dragover');
+    });
+    area.addEventListener('dragleave', () => area.classList.remove('dragover'));
+    area.addEventListener('drop', (e) => {
+      e.preventDefault();
+      area.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      handlePhotoUpload({ target: { files } });
+    });
+  }
+
+  async function handlePhotoUpload(event) {
+    const files = event.target.files;
+    if (!files) return;
+
+    for (let file of files) {
+      if (tempPhotos.length >= 10) {
+        showToast('最多只能上傳 10 張照片', 'error');
+        break;
+      }
+
+      try {
+        const blob = await compressImage(file);
+        tempPhotos.push({
+          blob,
+          file,
+          url: URL.createObjectURL(blob),
+          isNew: true,
+          display_order: tempPhotos.length
+        });
+      } catch (error) {
+        showToast('照片壓縮失敗: ' + error.message, 'error');
+      }
+    }
+    renderPhotoPreview();
+    document.getElementById('photo-input').value = '';
+  }
+
+  async function compressImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          let width = img.width;
+          let height = img.height;
+
+          if (width > 800) {
+            height = (height * 800) / width;
+            width = 800;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => resolve(blob),
+            'image/jpeg',
+            0.8
+          );
+        };
+        img.onerror = reject;
+      };
+      reader.onerror = reject;
+    });
+  }
+
+  function renderPhotoPreview() {
+    const container = document.getElementById('photo-previews');
+    container.innerHTML = tempPhotos.map((photo, i) => `
+      <div class="photo-preview-item ${i === 0 ? 'cover' : ''}">
+        <img src="${photo.url}" alt="photo" />
+        <button class="photo-preview-remove" onclick="removePhoto(${i})">✕</button>
+      </div>
+    `).join('');
+    document.getElementById('photo-count').textContent = `已上傳 ${tempPhotos.length} 張照片`;
+  }
+
+  function removePhoto(index) {
+    const photo = tempPhotos[index];
+    if (photo.id) {
+      photo.deleted = true;
+    } else {
+      tempPhotos.splice(index, 1);
+    }
+    renderPhotoPreview();
+  }
+
+  // ===== TENANTS =====
+  async function loadTenants() {
+    try {
+      const { data, error } = await supabase
+        .from('tenants')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      tenants = data || [];
+      await renderTenantsTable();
+      await populateTenantPropertySelect();
+    } catch (error) {
+      showToast('載入租客失敗: ' + error.message, 'error');
+    }
+  }
+
+  async function renderTenantsTable() {
+    const tbody = document.getElementById('tenants-table');
+    if (tenants.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#aaa">暫無租客</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = await Promise.all(tenants.map(async (t, i) => {
+      const propName = properties.find(p => p.id === parseInt(t.property))?.title || t.property;
+      return `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${t.name}</td>
+          <td>${t.phone}</td>
+          <td>${propName}</td>
+          <td>${t.start_date} ~ ${t.end_date}</td>
+          <td>NT$${parseInt(t.rent).toLocaleString()}</td>
+          <td><span class="badge ${t.status === '租約中' ? 'badge-green' : 'badge-orange'}">${t.status}</span></td>
+          <td>
+            <button class="btn btn-sm btn-navy" onclick="editTenant(${t.id})">編輯</button>
+            <button class="btn btn-sm btn-red" onclick="deleteTenant(${t.id})">刪除</button>
+          </td>
+        </tr>
+      `;
+    })).then(rows => rows.join(''));
+  }
+
+  async function populateTenantPropertySelect() {
+    const select = document.getElementById('t-property');
+    select.innerHTML = '<option value="">無</option>' + properties.map(p =>
+      `<option value="${p.id}">${p.title}</option>`
+    ).join('');
+  }
+
+  function openTenantModal() {
+    document.getElementById('t-edit-id').value = '';
+    document.getElementById('t-name').value = '';
+    document.getElementById('t-phone').value = '';
+    document.getElementById('t-email').value = '';
+    document.getElementById('t-property').value = '';
+    document.getElementById('t-start').value = '';
+    document.getElementById('t-end').value = '';
+    document.getElementById('t-rent').value = '';
+    document.getElementById('t-status').value = '租約中';
+    document.getElementById('tenant-modal-title').textContent = '新增租客';
+    document.getElementById('tenant-modal').classList.add('open');
+  }
+
+  async function editTenant(id) {
+    const tenant = tenants.find(t => t.id === id);
+    if (!tenant) return;
+    document.getElementById('t-edit-id').value = tenant.id;
+    document.getElementById('t-name').value = tenant.name;
+    document.getElementById('t-phone').value = tenant.phone;
+    document.getElementById('t-email').value = tenant.email || '';
+    document.getElementById('t-property').value = tenant.property || '';
+    document.getElementById('t-start').value = tenant.start_date || '';
+    document.getElementById('t-end').value = tenant.end_date || '';
+    document.getElementById('t-rent').value = tenant.rent || '';
+    document.getElementById('t-status').value = tenant.status || '租約中';
+    document.getElementById('tenant-modal-title').textContent = '編輯租客';
+    document.getElementById('tenant-modal').classList.add('open');
+  }
+
+  function closeTenantModal() {
+    document.getElementById('tenant-modal').classList.remove('open');
+  }
+
+  async function saveTenant() {
+    const id = document.getElementById('t-edit-id').value;
+    const name = document.getElementById('t-name').value.trim();
+    const phone = document.getElementById('t-phone').value.trim();
+    const email = document.getElementById('t-email').value.trim();
+    const property = document.getElementById('t-property').value;
+    const start_date = document.getElementById('t-start').value;
+    const end_date = document.getElementById('t-end').value;
+    const rent = document.getElementById('t-rent').value.trim();
+    const status = document.getElementById('t-status').value;
+
+    if (!name || !phone) {
+      showToast('請填寫租客姓名和電話', 'error');
+      return;
+    }
+
+    try {
+      const tenantData = { name, phone, email, property, start_date, end_date, rent, status, updated_at: new Date() };
+
+      if (id) {
+        const { error } = await supabase
+          .from('tenants')
+          .update(tenantData)
+          .eq('id', parseInt(id));
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('tenants')
+          .insert([tenantData]);
+        if (error) throw error;
+      }
+
+      showToast(id ? '租客已更新' : '租客已新增', 'success');
+      closeTenantModal();
+      await loadTenants();
+    } catch (error) {
+      showToast('儲存失敗: ' + error.message, 'error');
+    }
+  }
+
+  function deleteTenant(id) {
+    deleteCallback = async () => {
+      try {
+        const { error } = await supabase.from('tenants').delete().eq('id', id);
+        if (error) throw error;
+        showToast('租客已刪除', 'success');
+        closeConfirm();
+        await loadTenants();
+      } catch (error) {
+        showToast('刪除失敗: ' + error.message, 'error');
+        closeConfirm();
+      }
+    };
+    document.getElementById('confirm-message').textContent = '確認要刪除此租客嗎?';
+    document.getElementById('confirm-overlay').classList.add('open');
+  }
+
+  // ===== DASHBOARD =====
+  async function renderDashboard() {
+    try {
+      const total = properties.length;
+      const rented = properties.filter(p => p.status === '出租中').length;
+      const vacant = properties.filter(p => p.status === '空置').length;
+      const revenue = properties
+        .filter(p => p.status === '出租中')
+        .reduce((sum, p) => sum + parseInt(p.price || 0), 0);
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-rented').textContent = rented;
+      document.getElementById('stat-vacant').textContent = vacant;
+      document.getElementById('stat-revenue').textContent = `NT$${revenue.toLocaleString()}`;
+
+      const dashboardRows = properties.slice(0, 5).map((p, i) => `
+        <tr>
+          <td>${p.title}</td>
+          <td>${p.location}</td>
+          <td>NT$${parseInt(p.price).toLocaleString()}</td>
+          <td>${p.area}</td>
+          <td><span class="badge ${getStatusBadgeClass(p.status)}">${p.status}</span></td>
+        </tr>
+      `).join('');
+
+      document.getElementById('dashboard-table').innerHTML = dashboardRows ||
+        '<tr><td colspan="5" style="text-align:center;padding:30px;color:#aaa">暫無房源</td></tr>';
+    } catch (error) {
+      showToast('更新儀表板失敗: ' + error.message, 'error');
+    }
+  }
+
+  // ===== UI HELPERS =====
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`page-${page}`).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    event.target.closest('.nav-item').classList.add('active');
+
+    const titles = {
+      dashboard: '儀表板總覽',
+      properties: '房源管理',
+      tenants: '租客管理',
+      finance: '租金收支'
+    };
+    document.getElementById('page-title').textContent = titles[page] || page;
+
+    if (page === 'dashboard') {
+      renderDashboard();
+    } else if (page === 'properties') {
+      renderPropertiesTable();
+    } else if (page === 'tenants') {
+      renderTenantsTable();
+    }
+  }
+
+  function updateDate() {
+    const now = new Date();
+    const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+    document.getElementById('topbar-date').textContent = now.toLocaleDateString('zh-TW', options);
+  }
+
+  function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('open');
+    deleteCallback = null;
+  }
+
+  function confirmDelete() {
+    if (deleteCallback) deleteCallback();
+  }
+</script>
+
+</body>
+</html>

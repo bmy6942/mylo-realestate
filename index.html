@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>麥落不動產 | MYLO Real Estate</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --navy: #0d1b2a;
+      --navy2: #1b2d42;
+      --gold: #c9a84c;
+      --gold-light: #e8c87a;
+      --white: #ffffff;
+      --gray: #f5f5f5;
+      --text: #333;
+      --text-light: #777;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif; color: var(--text); }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 999;
+      background: rgba(13,27,42,0.96); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 60px; height: 70px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+    .nav-logo-icon {
+      width: 40px; height: 40px; background: var(--gold);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 900; color: var(--navy);
+    }
+    .nav-logo-text { color: var(--white); font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+    .nav-logo-text span { color: var(--gold); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85); text-decoration: none;
+      font-size: 14px; letter-spacing: 0.5px;
+      transition: color 0.3s; padding-bottom: 4px;
+      border-bottom: 2px solid transparent;
+    }
+    .nav-links a:hover { color: var(--gold); border-bottom-color: var(--gold); }
+    .nav-btn {
+      background: var(--gold); color: var(--navy); border: none;
+      padding: 9px 22px; border-radius: 6px; font-size: 14px; font-weight: 700;
+      cursor: pointer; text-decoration: none; transition: background 0.3s;
+    }
+    .nav-btn:hover { background: var(--gold-light); }
+
+    /* HERO */
+    .hero {
+      height: 100vh; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b2d42 50%, #0d2137 100%);
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1600') center/cover no-repeat;
+      opacity: 0.15;
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(201,168,76,0.05) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(201,168,76,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content { position: relative; text-align: center; padding: 0 20px; }
+    .hero-badge {
+      display: inline-block; background: rgba(201,168,76,0.15);
+      border: 1px solid rgba(201,168,76,0.4); color: var(--gold);
+      padding: 6px 18px; border-radius: 30px; font-size: 13px; letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 64px; font-weight: 900; color: var(--white);
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .hero h1 span { color: var(--gold); }
+    .hero-sub {
+      font-size: 18px; color: rgba(255,255,255,0.7);
+      margin-bottom: 40px; line-height: 1.7; max-width: 560px; margin-left: auto; margin-right: auto;
+    }
+    .hero-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--gold); color: var(--navy); padding: 14px 36px;
+      border-radius: 8px; font-size: 16px; font-weight: 700;
+      text-decoration: none; transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(201,168,76,0.4);
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .btn-outline {
+      border: 2px solid rgba(255,255,255,0.3); color: var(--white); padding: 14px 36px;
+      border-radius: 8px; font-size: 16px; font-weight: 600;
+      text-decoration: none; transition: all 0.3s;
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .hero-stats {
+      display: flex; gap: 40px; justify-content: center; margin-top: 60px; flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-number { font-size: 36px; font-weight: 900; color: var(--gold); }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,0.6); letter-spacing: 1px; }
+
+    /* PROPERTIES SECTION */
+    section {
+      padding: 80px 60px;
+    }
+    section > h2 {
+      font-size: 42px; font-weight: 900; color: var(--navy);
+      text-align: center; margin-bottom: 14px;
+    }
+    section > h2 span { color: var(--gold); }
+    section > p {
+      font-size: 16px; color: var(--text-light); text-align: center;
+      margin-bottom: 50px; line-height: 1.6;
+    }
+    .properties-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+    }
+    .property-card {
+      background: var(--white); border-radius: 12px; overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .property-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .property-img {
+      width: 100%; height: 220px; background: var(--gray);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 80px; overflow: hidden; position: relative;
+      cursor: pointer;
+    }
+    .property-img img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .property-tag {
+      position: absolute; top: 12px; right: 12px;
+      background: var(--gold); color: var(--navy);
+      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
+    }
+    .property-media-badge {
+      position: absolute; bottom: 12px; left: 12px;
+      background: rgba(0,0,0,0.6); color: var(--white);
+      padding: 6px 12px; border-radius: 6px; font-size: 12px;
+    }
+    .property-info { padding: 20px; }
+    .property-price {
+      font-size: 20px; font-weight: 900; color: var(--gold); margin-bottom: 8px;
+    }
+    .property-title {
+      font-size: 16px; font-weight: 700; color: var(--navy); margin-bottom: 10px;
+    }
+    .property-loc {
+      font-size: 14px; color: var(--text-light); margin-bottom: 12px;
+    }
+    .property-meta {
+      display: flex; gap: 16px; font-size: 13px; color: var(--text-light);
+    }
+
+    /* FADE-IN ANIMATION */
+    .fade-in {
+      opacity: 0; transform: translateY(20px); transition: opacity 0.8s, transform 0.8s;
+    }
+    .fade-in.visible {
+      opacity: 1; transform: translateY(0);
+    }
+
+    /* CONTACT SECTION */
+    #contact {
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b2d42 100%);
+      color: var(--white);
+    }
+    #contact h2 { color: var(--white); }
+    #contact > p { color: rgba(255,255,255,0.7); }
+    .contact-container {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 50px; margin-bottom: 40px;
+    }
+    .contact-info-group { margin-bottom: 30px; }
+    .contact-info-group h3 {
+      font-size: 16px; font-weight: 700; margin-bottom: 12px; color: var(--gold);
+    }
+    .contact-info-group p {
+      font-size: 14px; color: rgba(255,255,255,0.8);
+    }
+    .contact-form {
+      background: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: rgba(255,255,255,0.9);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 10px 14px; border: 1px solid rgba(201,168,76,0.4);
+      border-radius: 6px; background: rgba(255,255,255,0.1); color: var(--white);
+      font-family: inherit; font-size: 14px;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255,255,255,0.5);
+    }
+    .form-group select { color: rgba(255,255,255,0.7); }
+    .form-submit {
+      width: 100%; background: var(--gold); color: var(--navy);
+      padding: 12px; border: none; border-radius: 6px;
+      font-size: 16px; font-weight: 700; cursor: pointer;
+      transition: background 0.3s;
+    }
+    .form-submit:hover { background: var(--gold-light); }
+
+    /* LIGHTBOX */
+    .lightbox-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92);
+      z-index: 1000; align-items: center; justify-content: center;
+    }
+    .lightbox-overlay.open { display: flex; }
+    .lightbox-close {
+      position: absolute; top: 20px; right: 30px;
+      background: none; border: none; color: var(--white);
+      font-size: 40px; cursor: pointer; z-index: 1001;
+    }
+    .lightbox-main {
+      display: flex; align-items: center; justify-content: center;
+      gap: 20px; position: relative; width: 90%; max-width: 900px;
+      height: 70vh;
+    }
+    .lightbox-main img {
+      max-width: 100%; max-height: 100%; object-fit: contain;
+    }
+    .lightbox-main iframe {
+      width: 100%; height: 100%; border: none;
+    }
+    .lightbox-nav {
+      background: rgba(255,255,255,0.2); border: none; color: var(--white);
+      width: 50px; height: 50px; border-radius: 50%;
+      font-size: 24px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center;
+      transition: background 0.3s;
+    }
+    .lightbox-nav:hover { background: rgba(255,255,255,0.4); }
+    .lightbox-thumbs {
+      display: flex; gap: 12px; justify-content: center;
+      margin-top: 20px; flex-wrap: wrap;
+    }
+    .lightbox-thumb {
+      width: 70px; height: 70px; border: 2px solid transparent;
+      border-radius: 6px; overflow: hidden; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,0.1); transition: border-color 0.3s;
+    }
+    .lightbox-thumb.active { border-color: var(--gold); }
+    .lightbox-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .video-thumb { font-size: 20px; color: var(--white); }
+    .lightbox-title {
+      position: absolute; bottom: -50px; left: 50%;
+      transform: translateX(-50%); color: var(--white);
+      font-size: 14px; text-align: center; white-space: nowrap;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--navy); color: rgba(255,255,255,0.6);
+      text-align: center; padding: 30px 20px; font-size: 13px;
+    }
+    footer a { color: var(--gold); text-decoration: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      section { padding: 50px 20px; }
+      .hero h1 { font-size: 42px; }
+      .contact-container { grid-template-columns: 1fr; }
+      .lightbox-main { width: 95%; }
+      .lightbox-title { bottom: -40px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">M</div>
+    <span class="nav-logo-text">麥落 <span>Real Estate</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#properties">房源</a></li>
+    <li><a href="#contact">聯繫</a></li>
+  </ul>
+  <button class="nav-btn">後台登入</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🏠 精選房源</div>
+    <h1>探索 <span>理想家園</span></h1>
+    <p class="hero-sub">
+      我們提供精選的房屋出租和出售服務，幫助您找到最適合的不動產。
+    </p>
+    <div class="hero-btns">
+      <a href="#properties" class="btn-primary">瀏覽房源</a>
+      <a href="#contact" class="btn-outline">聯繫我們</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-number">500+</div>
+        <div class="stat-label">滿意顧客</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">成功案例</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">20+</div>
+        <div class="stat-label">專業團隊</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTIES -->
+<section id="properties">
+  <h2>精選 <span>房源</span></h2>
+  <p>最新上架的優質房源，快速瀏覽您心儀的物業</p>
+  <div class="properties-grid" id="properties-list"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2>聯繫 <span>我們</span></h2>
+  <p>有任何問題或需求，歡迎與我們聯繫</p>
+  <div class="contact-container">
+    <div>
+      <div class="contact-info-group">
+        <h3>電話</h3>
+        <p>(02) 2699-1234</p>
+      </div>
+      <div class="contact-info-group">
+        <h3>電子郵件</h3>
+        <p>info@mylo-realestate.com</p>
+      </div>
+      <div class="contact-info-group">
+        <h3>地址</h3>
+        <p>新北市新莊區建國路123號</p>
+      </div>
+      <div class="contact-info-group">
+        <h3>營業時間</h3>
+        <p>週一至週六 09:00 – 18:00</p>
+      </div>
+    </div>
+    <div class="fade-in">
+      <div class="contact-form">
+        <div class="form-group">
+          <label>您的姓名</label>
+          <input type="text" placeholder="請輸入姓名" />
+        </div>
+        <div class="form-group">
+          <label>聯絡電話</label>
+          <input type="tel" placeholder="請輸入電話" />
+        </div>
+        <div class="form-group">
+          <label>詢問類型</label>
+          <select>
+            <option>包租代管諮詢</option>
+            <option>房源租賃查詢</option>
+            <option>維修服務申請</option>
+            <option>其他問題</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>詢問內容</label>
+          <textarea placeholder="請輸入您的問題或需求..."></textarea>
+        </div>
+        <button class="form-submit" onclick="alert('感謝您的詢問！我們將盡快與您聯繫。')">送出詢問</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-overlay" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+  <div class="lightbox-main" id="lightbox-main">
+    <button class="lightbox-nav prev" onclick="lightboxNav(-1)">&#8249;</button>
+    <img id="lightbox-img" src="" alt="" />
+    <button class="lightbox-nav next" onclick="lightboxNav(1)">&#8250;</button>
+  </div>
+  <div class="lightbox-thumbs" id="lightbox-thumbs"></div>
+  <div class="lightbox-title" id="lightbox-title"></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 麥落不動產 MYLO Real Estate. All Rights Reserved. | <a href="admin.html">後台管理</a></p>
+</footer>
+
+<!-- SUPABASE JS SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  // Initialize Supabase client
+  const SUPABASE_URL = 'https://ehvbuzxixaxwphlrszuw.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVodmJ1enhpeGF4d3BobHJzenV3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjgxMjcsImV4cCI6MjA4OTk0NDEyN30.2XJiHQFurNoXlZ0LWJTsVZOYVI7RF1XhVeXMvX-E4aM';
+  const STORAGE_BUCKET = 'property-photos';
+  const STORAGE_URL_BASE = 'https://ehvbuzxixaxwphlrszuw.supabase.co/storage/v1/object/public/property-photos';
+
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Load properties from Supabase
+  async function loadProperties() {
+    try {
+      const { data, error } = await supabase
+        .from('properties')
+        .select('*, property_photos(*)')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (error) {
+        console.error('Error loading properties:', error);
+        return null;
+      }
+
+      // Map property_photos to photos array with full URLs
+      return data.map(property => ({
+        ...property,
+        photos: (property.property_photos || [])
+          .sort((a, b) => (a.display_order || 0) - (b.display_order || 0))
+          .map(photo => `${STORAGE_URL_BASE}/${photo.storage_path}`)
+      }));
+    } catch (err) {
+      console.error('Exception loading properties:', err);
+      return null;
+    }
+  }
+
+  function getYouTubeEmbedUrl(url) {
+    if (!url) return null;
+    let vid = null;
+    const m1 = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s?]+)/);
+    if (m1) vid = m1[1];
+    if (vid) return 'https://www.youtube.com/embed/' + vid;
+    return null;
+  }
+
+  async function renderProperties() {
+    const props = await loadProperties();
+    const container = document.getElementById('properties-list');
+
+    if (!props || props.length === 0) {
+      container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">Unable to load properties. Please try again later.</p>';
+      return;
+    }
+
+    const displayed = props.slice(0, 3);
+    container.innerHTML = displayed.map((p, idx) => {
+      const hasPhotos = p.photos && p.photos.length;
+      const photoCount = hasPhotos ? p.photos.length : 0;
+      const hasVideo = !!p.video;
+      const mediaBadge = (photoCount || hasVideo) ?
+        `<div class="property-media-badge">${photoCount ? '📷 ' + photoCount : ''}${hasVideo ? ' 🎬' : ''}</div>` : '';
+      const imgContent = hasPhotos ?
+        `<img src="${p.photos[0]}" alt="${p.title}" />` :
+        (p.icon || '🏠');
+      const clickAction = (hasPhotos || hasVideo) ?
+        `onclick="openLightbox(${idx})"` : '';
+      return `
+      <div class="property-card fade-in">
+        <div class="property-img" ${clickAction}>
+          ${imgContent}
+          <div class="property-tag">${p.type || '出租'}</div>
+          ${mediaBadge}
+        </div>
+        <div class="property-info">
+          <div class="property-price">NT$ ${p.price} / 月</div>
+          <div class="property-title">${p.title}</div>
+          <div class="property-loc">📍 ${p.location}</div>
+          <div class="property-meta">
+            <span>📐 ${p.area}</span>
+            <span>🚪 ${p.rooms}</span>
+            <span>🏢 ${p.floor}</span>
+          </div>
+        </div>
+      </div>
+    `}).join('');
+    observeFadeIn();
+  }
+
+  // ===== LIGHTBOX =====
+  let lightboxData = { items: [], currentIndex: 0, title: '' };
+
+  async function openLightbox(propIdx) {
+    const props = await loadProperties();
+    if (!props || !props[propIdx]) return;
+
+    const p = props[propIdx];
+    const items = [];
+
+    // Add photos
+    (p.photos || []).forEach((src, i) => {
+      items.push({ type: 'image', src, label: `照片 ${i + 1}` });
+    });
+
+    // Add video
+    if (p.video) {
+      const embedUrl = getYouTubeEmbedUrl(p.video);
+      if (embedUrl) {
+        items.push({ type: 'video', src: embedUrl, label: '影片' });
+      }
+    }
+
+    if (!items.length) return;
+
+    lightboxData = { items, currentIndex: 0, title: p.title };
+    renderLightbox();
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+    // Remove any iframe
+    const main = document.getElementById('lightbox-main');
+    const iframe = main.querySelector('iframe');
+    if (iframe) iframe.remove();
+  }
+
+  function lightboxNav(dir) {
+    const len = lightboxData.items.length;
+    lightboxData.currentIndex = (lightboxData.currentIndex + dir + len) % len;
+    renderLightbox();
+  }
+
+  function lightboxGoTo(idx) {
+    lightboxData.currentIndex = idx;
+    renderLightbox();
+  }
+
+  function renderLightbox() {
+    const { items, currentIndex, title } = lightboxData;
+    const item = items[currentIndex];
+    const main = document.getElementById('lightbox-main');
+    const img = document.getElementById('lightbox-img');
+
+    // Remove old iframe if any
+    const oldIframe = main.querySelector('iframe');
+    if (oldIframe) oldIframe.remove();
+
+    if (item.type === 'image') {
+      img.style.display = 'block';
+      img.src = item.src;
+    } else {
+      img.style.display = 'none';
+      const iframe = document.createElement('iframe');
+      iframe.src = item.src;
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('allow', 'autoplay; encrypted-media');
+      main.insertBefore(iframe, main.children[1]);
+    }
+
+    // Nav buttons visibility
+    const prevBtn = main.querySelector('.prev');
+    const nextBtn = main.querySelector('.next');
+    prevBtn.style.display = items.length > 1 ? 'flex' : 'none';
+    nextBtn.style.display = items.length > 1 ? 'flex' : 'none';
+
+    // Thumbs
+    const thumbsContainer = document.getElementById('lightbox-thumbs');
+    thumbsContainer.innerHTML = items.map((it, i) => {
+      if (it.type === 'video') {
+        return `<div class="lightbox-thumb video-thumb ${i === currentIndex ? 'active' : ''}" onclick="lightboxGoTo(${i})">▶</div>`;
+      }
+      return `<div class="lightbox-thumb ${i === currentIndex ? 'active' : ''}" onclick="lightboxGoTo(${i})"><img src="${it.src}" /></div>`;
+    }).join('');
+
+    // Title
+    document.getElementById('lightbox-title').textContent = `${title} — ${item.label} (${currentIndex + 1}/${items.length})`;
+  }
+
+  // Close lightbox on overlay click or ESC
+  document.getElementById('lightbox').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeLightbox();
+  });
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxNav(-1);
+    if (e.key === 'ArrowRight') lightboxNav(1);
+  });
+
+  // Fade-in animation
+  function observeFadeIn() {
+    const els = document.querySelectorAll('.fade-in:not(.visible)');
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.1 });
+    els.forEach(el => obs.observe(el));
+  }
+
+  // Initialize
+  renderProperties();
+  observeFadeIn();
+</script>
+</body>
+</html>
