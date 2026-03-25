@@ -599,7 +599,7 @@
           <div class="photo-upload-icon">📷</div>
           <div class="photo-upload-text">點擊上傳或<strong>拖曳照片</strong>到此處</div>
           <div class="photo-upload-hint">支援 JPG、PNG，每張自動壓縮至 800px 寬度</div>
-          <input type="file" id="photo-input" class="photo-upload-input" accept="image/*" multiple onchange="handlePhotoUpload(event)" />
+          <input type="file" id="photo-input" class="photo-upload-input" accept="image/*" multiple />
         </div>
         <div class="photo-previews" id="photo-previews"></div>
         <div class="photo-count" id="photo-count"></div>
@@ -1083,13 +1083,17 @@
 
   function renderPhotoPreview() {
     const container = document.getElementById('photo-previews');
-    container.innerHTML = tempPhotos.map((photo, i) => `
-      <div class="photo-preview-item ${i === 0 ? 'cover' : ''}">
+    const visiblePhotos = tempPhotos.filter(p => !p.deleted);
+    container.innerHTML = visiblePhotos.map((photo) => {
+      const realIndex = tempPhotos.indexOf(photo);
+      return `
+      <div class="photo-preview-item ${realIndex === 0 ? 'cover' : ''}">
         <img src="${photo.url}" alt="photo" />
-        <button class="photo-preview-remove" onclick="removePhoto(${i})">✕</button>
+        <button class="photo-preview-remove" onclick="removePhoto(${realIndex})">✕</button>
       </div>
-    `).join('');
-    document.getElementById('photo-count').textContent = `已上傳 ${tempPhotos.length} 張照片`;
+    `;
+    }).join('');
+    document.getElementById('photo-count').textContent = `已上傳 ${visiblePhotos.length} 張照片`;
   }
 
   function removePhoto(index) {
