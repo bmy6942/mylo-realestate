@@ -594,7 +594,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>房源照片（最多 10 張）</label>
+        <label>房源照片（最多 30 張）</label>
         <div class="photo-upload-area" id="photo-upload-area" onclick="document.getElementById('photo-input').click()">
           <div class="photo-upload-icon">📷</div>
           <div class="photo-upload-text">點擊上傳或<strong>拖曳照片</strong>到此處</div>
@@ -1025,8 +1025,8 @@
     if (!files) return;
 
     for (let file of files) {
-      if (tempPhotos.length >= 10) {
-        showToast('最多只能上傳 10 張照片', 'error');
+      if (tempPhotos.length >= 30) {
+        showToast('最多只能上傳 30 張照片', 'error');
         break;
       }
 
