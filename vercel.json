@@ -4,6 +4,7 @@
   "routes": [
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/admin.html", "dest": "/admin.html" },
+    { "src": "/property", "dest": "/property.html" },
     { "src": "/(.*)", "dest": "/$1" }
   ],
   "headers": [

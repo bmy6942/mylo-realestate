@@ -396,15 +396,8 @@
         <div class="nav-item" onclick="showPage('properties')">
           <span class="nav-icon">🏠</span> 房源管理
         </div>
-        <div class="nav-item" onclick="showPage('tenants')">
-          <span class="nav-icon">👥</span> 租客管理
-        </div>
-        <div class="sidebar-section-label">財務</div>
-        <div class="nav-item" onclick="showPage('finance')">
-          <span class="nav-icon">💰</span> 租金收支
-        </div>
         <div class="sidebar-section-label">系統</div>
-        <div class="nav-item" onclick="window.open('index.html','_blank')">
+        <div class="nav-item" onclick="window.location.href='index.html'">
           <span class="nav-icon">🌐</span> 查看官網
         </div>
       </nav>
@@ -528,42 +521,6 @@
           </div>
         </div>
 
-        <!-- TENANTS -->
-        <div class="page" id="page-tenants">
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">👥 租客管理</span>
-              <button class="btn btn-gold" onclick="openTenantModal()">＋ 新增租客</button>
-            </div>
-            <div class="card-body">
-              <table>
-                <thead>
-                  <tr><th>#</th><th>租客姓名</th><th>聯絡電話</th><th>房源</th><th>租約起訖</th><th>月租金</th><th>狀態</th><th>操作</th></tr>
-                </thead>
-                <tbody id="tenants-table"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- FINANCE -->
-        <div class="page" id="page-finance">
-          <div class="card">
-            <div class="card-header">
-              <span class="card-title">💰 租金收支記錄</span>
-            </div>
-            <div class="card-body">
-              <table>
-                <thead>
-                  <tr><th>#</th><th>月份</th><th>房源</th><th>租客</th><th>應收金額</th><th>繳納狀態</th><th>繳納日期</th></tr>
-                </thead>
-                <tbody id="finance-table">
-                  <tr><td colspan="7" style="text-align:center;padding:40px;color:#aaa">💡 請先在房源管理中新增房源與租客資料</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -664,45 +621,6 @@
   </div>
 </div>
 
-<!-- TENANT MODAL -->
-<div class="modal-overlay" id="tenant-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="tenant-modal-title">新增租客</span>
-      <button class="modal-close" onclick="closeTenantModal()">✕</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="t-edit-id" />
-      <div class="form-row">
-        <div class="form-group"><label>租客姓名 *</label><input type="text" id="t-name" placeholder="姓名" /></div>
-        <div class="form-group"><label>聯絡電話 *</label><input type="text" id="t-phone" placeholder="0912-345-678" /></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>電子信箱</label><input type="email" id="t-email" placeholder="email@example.com" /></div>
-        <div class="form-group">
-          <label>承租房源</label>
-          <select id="t-property"></select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>租約開始</label><input type="date" id="t-start" /></div>
-        <div class="form-group"><label>租約結束</label><input type="date" id="t-end" /></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>月租金（元）</label><input type="text" id="t-rent" placeholder="12,000" /></div>
-        <div class="form-group">
-          <label>狀態</label>
-          <select id="t-status"><option>租約中</option><option>即將到期</option><option>已結束</option></select>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-navy" onclick="closeTenantModal()">取消</button>
-      <button class="btn btn-gold" onclick="saveTenant()">💾 儲存</button>
-    </div>
-  </div>
-</div>
-
 <!-- CONFIRM DELETE -->
 <div class="confirm-overlay" id="confirm-overlay">
   <div class="confirm-box">
@@ -731,7 +649,6 @@
   // ===== STATE =====
   let currentUser = null;
   let properties = [];
-  let tenants = [];
   let tempPhotos = [];
   let deleteCallback = null;
   let isSignupMode = false;
@@ -838,7 +755,6 @@
     document.getElementById('user-avatar').textContent = initials;
     document.getElementById('user-name').textContent = currentUser.email.split('@')[0];
     await loadProperties();
-    await loadTenants();
     await renderDashboard();
   }
 
@@ -1176,146 +1092,13 @@
   }
 
   // ===== TENANTS =====
-  async function loadTenants() {
-    try {
-      const { data, error } = await sb
-        .from('tenants')
-        .select('*')
-        .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      tenants = data || [];
-      await renderTenantsTable();
-      await populateTenantPropertySelect();
-    } catch (error) {
-      showToast('載入租客失敗: ' + error.message, 'error');
-    }
-  }
 
-  async function renderTenantsTable() {
-    const tbody = document.getElementById('tenants-table');
-    if (tenants.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#aaa">暫無租客</td></tr>';
-      return;
-    }
 
-    tbody.innerHTML = await Promise.all(tenants.map(async (t, i) => {
-      const propName = properties.find(p => p.id === parseInt(t.property))?.title || t.property;
-      return `
-        <tr>
-          <td>${i + 1}</td>
-          <td>${t.name}</td>
-          <td>${t.phone}</td>
-          <td>${propName}</td>
-          <td>${t.start_date} ~ ${t.end_date}</td>
-          <td>NT$${parseInt(t.rent).toLocaleString()}</td>
-          <td><span class="badge ${t.status === '租約中' ? 'badge-green' : 'badge-orange'}">${t.status}</span></td>
-          <td>
-            <button class="btn btn-sm btn-navy" onclick="editTenant(${t.id})">編輯</button>
-            <button class="btn btn-sm btn-red" onclick="deleteTenant(${t.id})">刪除</button>
-          </td>
-        </tr>
-      `;
-    })).then(rows => rows.join(''));
-  }
 
-  async function populateTenantPropertySelect() {
-    const select = document.getElementById('t-property');
-    select.innerHTML = '<option value="">無</option>' + properties.map(p =>
-      `<option value="${p.id}">${p.title}</option>`
-    ).join('');
-  }
 
-  function openTenantModal() {
-    document.getElementById('t-edit-id').value = '';
-    document.getElementById('t-name').value = '';
-    document.getElementById('t-phone').value = '';
-    document.getElementById('t-email').value = '';
-    document.getElementById('t-property').value = '';
-    document.getElementById('t-start').value = '';
-    document.getElementById('t-end').value = '';
-    document.getElementById('t-rent').value = '';
-    document.getElementById('t-status').value = '租約中';
-    document.getElementById('tenant-modal-title').textContent = '新增租客';
-    document.getElementById('tenant-modal').classList.add('open');
-  }
 
-  async function editTenant(id) {
-    const tenant = tenants.find(t => t.id === id);
-    if (!tenant) return;
-    document.getElementById('t-edit-id').value = tenant.id;
-    document.getElementById('t-name').value = tenant.name;
-    document.getElementById('t-phone').value = tenant.phone;
-    document.getElementById('t-email').value = tenant.email || '';
-    document.getElementById('t-property').value = tenant.property || '';
-    document.getElementById('t-start').value = tenant.start_date || '';
-    document.getElementById('t-end').value = tenant.end_date || '';
-    document.getElementById('t-rent').value = tenant.rent || '';
-    document.getElementById('t-status').value = tenant.status || '租約中';
-    document.getElementById('tenant-modal-title').textContent = '編輯租客';
-    document.getElementById('tenant-modal').classList.add('open');
-  }
 
-  function closeTenantModal() {
-    document.getElementById('tenant-modal').classList.remove('open');
-  }
-
-  async function saveTenant() {
-    const id = document.getElementById('t-edit-id').value;
-    const name = document.getElementById('t-name').value.trim();
-    const phone = document.getElementById('t-phone').value.trim();
-    const email = document.getElementById('t-email').value.trim();
-    const property = document.getElementById('t-property').value;
-    const start_date = document.getElementById('t-start').value;
-    const end_date = document.getElementById('t-end').value;
-    const rent = document.getElementById('t-rent').value.trim();
-    const status = document.getElementById('t-status').value;
-
-    if (!name || !phone) {
-      showToast('請填寫租客姓名和電話', 'error');
-      return;
-    }
-
-    try {
-      const tenantData = { name, phone, email, property, start_date, end_date, rent, status, updated_at: new Date() };
-
-      if (id) {
-        const { error } = await sb
-          .from('tenants')
-          .update(tenantData)
-          .eq('id', parseInt(id));
-        if (error) throw error;
-      } else {
-        const { error } = await sb
-          .from('tenants')
-          .insert([tenantData]);
-        if (error) throw error;
-      }
-
-      showToast(id ? '租客已更新' : '租客已新增', 'success');
-      closeTenantModal();
-      await loadTenants();
-    } catch (error) {
-      showToast('儲存失敗: ' + error.message, 'error');
-    }
-  }
-
-  function deleteTenant(id) {
-    deleteCallback = async () => {
-      try {
-        const { error } = await sb.from('tenants').delete().eq('id', id);
-        if (error) throw error;
-        showToast('租客已刪除', 'success');
-        closeConfirm();
-        await loadTenants();
-      } catch (error) {
-        showToast('刪除失敗: ' + error.message, 'error');
-        closeConfirm();
-      }
-    };
-    document.getElementById('confirm-message').textContent = '確認要刪除此租客嗎?';
-    document.getElementById('confirm-overlay').classList.add('open');
-  }
 
   // ===== DASHBOARD =====
   async function renderDashboard() {
@@ -1358,9 +1141,7 @@
 
     const titles = {
       dashboard: '儀表板總覽',
-      properties: '房源管理',
-      tenants: '租客管理',
-      finance: '租金收支'
+      properties: '房源管理'
     };
     document.getElementById('page-title').textContent = titles[page] || page;
 
@@ -1368,8 +1149,6 @@
       renderDashboard();
     } else if (page === 'properties') {
       renderPropertiesTable();
-    } else if (page === 'tenants') {
-      renderTenantsTable();
     }
   }
 
@@ -1410,11 +1189,6 @@
   window.confirmDelete = confirmDelete;
   window.closeConfirm = closeConfirm;
   window.removePhoto = removePhoto;
-  window.openTenantModal = openTenantModal;
-  window.editTenant = editTenant;
-  window.closeTenantModal = closeTenantModal;
-  window.saveTenant = saveTenant;
-  window.deleteTenant = deleteTenant;
 </script>
 
 </body>
