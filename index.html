@@ -201,6 +201,8 @@
       background: var(--gold); color: var(--navy);
       padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700;
     }
+    .property-tag.rented { background: var(--gold); color: var(--navy); }
+    .property-tag.vacant { background: #4CAF50; color: #fff; }
     .property-media-badge {
       position: absolute; bottom: 12px; left: 12px;
       background: rgba(0,0,0,0.6); color: var(--white);
@@ -694,7 +696,7 @@
       <div class="property-card fade-in">
         <div class="property-img" ${clickAction}>
           ${imgContent}
-          <div class="property-tag">${p.status || '空置'}</div>
+          <div class="property-tag ${p.status === '出租中' ? 'rented' : 'vacant'}">${p.status || '空置'}</div>
           ${mediaBadge}
         </div>
         <div class="property-info">

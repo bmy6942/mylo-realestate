@@ -304,7 +304,14 @@
       document.getElementById('prop-rooms').textContent = currentProperty.rooms || '-';
       document.getElementById('prop-floor').textContent = currentProperty.floor || '-';
       document.getElementById('prop-type').textContent = currentProperty.type || '-';
-      document.getElementById('prop-status').textContent = currentProperty.status || '-';
+      const statusEl = document.getElementById('prop-status');
+      const statusText = currentProperty.status || '-';
+      statusEl.textContent = statusText;
+      statusEl.style.cssText = statusText === '出租中'
+        ? 'color:#b8860b;font-weight:700'
+        : statusText === '空置'
+        ? 'color:#4CAF50;font-weight:700'
+        : '';
 
       // Description
       if (currentProperty.note) {
